@@ -1,0 +1,13 @@
+silent: false
+branchName: "issue-${issue.number}${issue.title}"
+defaultBranch: "master"
+gitSafeReplacementChar: "_"
+branches:
+  - label: "enhancement"
+    prefix: feat/
+  - label: "bug"
+    prefix: bugfix/
+  - label: "refactor"
+    prefix: refact/
+  - label: "*"
+    skip: true
