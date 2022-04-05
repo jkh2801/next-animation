@@ -1,0 +1,83 @@
+.container {
+  position: absolute;
+  top: 60px;
+  bottom: 60px;
+  left: 5vw;
+  right: 5vw;
+  border: 1px solid #ffffff4d;
+  background: #22222280;
+  border-radius: 10px;
+  overflow: hidden;
+  .leftMenuBox {
+    width: 300px;
+    .title {
+      height: 70px;
+      color: #fff;
+      border-bottom: 1px solid #ffffff4d;
+    }
+    .scrollBox {
+      height: 100%;
+      overflow: hidden;
+      .menuBox {
+        height: 60px;
+        transition: 0.5s;
+        opacity: 1;
+        visibility: visible;
+        color: #fff;
+        border-bottom: 1px solid #ffffff4d;
+        cursor: pointer;
+        padding-left: 50px;
+        .arrowIcon {
+          position: absolute;
+          top: 50%;
+          left: 0px;
+          z-index: 1;
+          transform: translateY(-50%) rotate(-90deg);
+          fill: #ffffff4d;
+        }
+        &:hover .arrowIcon {
+          animation: arrowAnimation 0.5s linear infinite;
+        }
+        &.urlAble.active .arrowIcon {
+          animation: none;
+          transform: translateY(-50%) rotate(0deg);
+        }
+      }
+      .sideBox {
+        color: #fff;
+        border-bottom: 1px solid #ffffff4d;
+        cursor: pointer;
+        transition: 0.5s;
+        padding-left: 50px;
+        &:hover {
+          background: #ffffff4d;
+        }
+      }
+      .urlAble {
+        opacity: 1;
+        visibility: visible;
+        height: 60px;
+      }
+      .urlDisAble {
+        opacity: 0;
+        visibility: hidden;
+        height: 0;
+      }
+    }
+  }
+  .rightBox {
+    width: calc(100% - 300px);
+    border-left: 1px solid #ffffff4d;
+  }
+}
+
+@keyframes arrowAnimation {
+  0% {
+    transform: translateY(-50%) rotate(-90deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(20px) translateY(-50%) rotate(-90deg);
+    opacity: 0;
+  }
+}
