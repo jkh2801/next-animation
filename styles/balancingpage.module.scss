@@ -1,0 +1,120 @@
+.wrapper {
+  width: 1000px;
+  height: 600px;
+  .line {
+    position: absolute;
+    top: 100px;
+    width: 100%;
+    height: 10px;
+    background: #fffa9a;
+    border-radius: 20px;
+    box-shadow: 0 0 10px #fff200;
+    transition: 1s;
+    @for $i from 1 to 8 {
+      &.leftActive-#{$i} {
+        transform: rotate($i * -3deg);
+      }
+      &.rightActive-#{$i} {
+        transform: rotate($i * 3deg);
+      }
+    }
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff200;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 10px #fff200;
+    }
+    &::after {
+      left: 100%;
+    }
+    .left {
+      left: 0%;
+    }
+    .right {
+      left: 100%;
+    }
+    .area {
+      position: absolute;
+      top: 100%;
+      width: 300px;
+      height: 300px;
+      transform: translateX(-50%);
+      transition: 1s;
+      transition-delay: 0.1s;
+      transform-origin: top;
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        width: 1px;
+        height: 334px;
+        background: #fff;
+      }
+      &::before {
+        transform: translate(-75px, -27px) rotate(26deg);
+      }
+      &::after {
+        transform: translate(75px, -27px) rotate(-26deg);
+      }
+      .input {
+        position: absolute;
+        top: 75%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: transparent;
+        color: #fff;
+        text-align: center;
+      }
+      .plain {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 10px;
+        background: #fff;
+        border-bottom-left-radius: 100px;
+        border-bottom-right-radius: 100px;
+        box-shadow: 0 0 10px #fff;
+      }
+      @for $i from 1 to 8 {
+        &.leftActive-#{$i} {
+          transform: translateX(-50%) rotate($i * 3deg);
+        }
+        &.rightActive-#{$i} {
+          transform: translateX(-50%) rotate($i * -3deg);
+        }
+      }
+    }
+  }
+  .body {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 100%;
+    background: #fffa9a;
+    border-radius: 20px;
+    box-shadow: 0 0 10px #fff200;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      width: 200px;
+      height: 20px;
+      background: #fff53a;
+      transform: translateX(-50%);
+      border-radius: 5px;
+      box-shadow: 0 0 10px #fff;
+    }
+  }
+}

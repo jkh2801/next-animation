@@ -110,7 +110,7 @@ li {
 @include flex('AroundCenter', space-around, center);
 @include flex('Center', center, center);
 
-@for $i from 10 to 31 {
+@for $i from 10 to 51 {
   .fs-#{$i} {
     font-size: $i * 1px;
   }

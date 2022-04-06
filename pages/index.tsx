@@ -10,7 +10,7 @@ export default function HomePage() {
   useEffect(() => {
     const mainLoading = localStorage.getItem('main-loading');
     setStatus(mainLoading ? '' : 'active');
-    // localStorage.setItem('main-loading', 'success');
+    localStorage.setItem('main-loading', 'success');
   }, []);
   return (
     <div className="body flexCenter">
