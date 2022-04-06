@@ -4,19 +4,35 @@ import styles from './HomeBox.module.scss';
 import { routeNames } from '@utils/const/routeNames';
 import Link from 'next/link';
 import RoundArrowIcon from '@assets/roundArrowIcon.svg';
+import { SetStateType } from '@customTypes/CommonTypes';
 
-const HomeBox: FC<{ status: string }> = ({ status }) => {
+const HomeBox: FC<{ status: string; setStatus: SetStateType<string> }> = ({ status, setStatus }) => {
   console.log(status);
   const [menuState, setMenuState] = useState(-1);
   const handleMenu = (num: number) => {
+    setStatus('');
     if (menuState === -1) setMenuState(num);
     else setMenuState(-1);
   };
   return (
-    <div className={cn('flex', styles.container)}>
+    <div className={cn('flex', styles.container, status && styles.active)}>
+      <span className={cn(styles.borderWidth, styles.top, status && styles.active)}></span>
+      <span className={cn(styles.borderHeight, styles.left, status && styles.active)}></span>
+      <span className={cn(styles.borderWidth, styles.bottom, status && styles.active)}></span>
+      <span className={cn(styles.borderHeight, styles.right, status && styles.active)}></span>
       <div className={styles.leftMenuBox}>
+        <span className={cn(styles.borderHeight, styles.right, status && styles.active)}></span>
         <div className="flexColumn">
-          <div className={cn('flexCenter number fs-20', styles.title)}>React-Animation</div>
+          <div className={cn('flexCenter gap-1', styles.title)}>
+            {'React-Animation'.split('').map((str, idx) => {
+              return (
+                <span key={idx} className={cn('number fs-20', status && styles['active-' + idx])}>
+                  {str}
+                </span>
+              );
+            })}
+            <span className={cn(styles.borderWidth, styles.bottom, status && styles.active)}></span>
+          </div>
           <div className={styles.scrollBox}>
             {routeNames
               .filter(route => route.type !== 'APP')
@@ -27,8 +43,9 @@ const HomeBox: FC<{ status: string }> = ({ status }) => {
                       className={cn('flexAlignCenter fs-18', styles.menuBox, menuState === idx || menuState === -1 ? styles.urlAble : styles.urlDisAble, menuState === idx && styles.active)}
                       onClick={() => handleMenu(idx)}
                     >
-                      <RoundArrowIcon className={styles.arrowIcon} />
-                      {route.name}
+                      <RoundArrowIcon className={cn(styles.arrowIcon, status && styles.active, status && styles['active-' + idx])} />
+                      <span className={cn('flex gap-1', styles.headTitle, status && styles.active, status && styles['active-' + idx])}>{route.name}</span>
+                      <span className={cn(styles.borderWidth, styles.bottom, status && styles.active, status && styles['active-' + idx])}></span>
                     </div>
                     {route.data.map((str, i) => {
                       return (

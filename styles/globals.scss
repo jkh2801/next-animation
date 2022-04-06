@@ -120,7 +120,7 @@ li {
     font-weight: $i * 100;
   }
 }
-@for $i from 5 to 20 {
+@for $i from 1 to 20 {
   .gap-#{$i} {
     gap: $i * 1px;
   }

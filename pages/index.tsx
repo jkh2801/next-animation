@@ -15,7 +15,7 @@ export default function HomePage() {
   return (
     <div className="body flexCenter">
       <video src="/video/bg.mp4" autoPlay loop muted className={styles.bgVideo} />
-      {status !== 'loading' && <HomeBox status={status} />}
+      {status !== 'loading' && <HomeBox status={status} setStatus={setStatus} />}
     </div>
   );
 }

@@ -4,16 +4,84 @@
   bottom: 60px;
   left: 5vw;
   right: 5vw;
-  border: 1px solid #ffffff4d;
   background: #22222280;
-  border-radius: 10px;
   overflow: hidden;
+  &.active {
+    background: #22222200;
+    animation: changeBG 0.5s linear forwards;
+    animation-delay: 1.5s;
+  }
+  .borderWidth {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #ffffff4d;
+    &.top {
+      top: 0;
+      transform-origin: left;
+      &.active {
+        transform: scaleX(0);
+        animation: animateScaleX 1s linear forwards;
+        animation-delay: 0.5s;
+      }
+    }
+    &.bottom {
+      bottom: 0;
+      transform-origin: right;
+      &.active {
+        transform: scaleX(0);
+        animation: animateScaleX 1s linear forwards;
+        animation-delay: 0.5s;
+      }
+    }
+  }
+  .borderHeight {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: #ffffff4d;
+    &.left {
+      left: 0;
+      transform-origin: bottom;
+      &.active {
+        transform: scaleY(0);
+        animation: animateScaleY 1s linear forwards;
+        animation-delay: 0.5s;
+      }
+    }
+    &.right {
+      right: 0;
+      transform-origin: top;
+      &.active {
+        transform: scaleY(0);
+        animation: animateScaleY 1s linear forwards;
+        animation-delay: 0.5s;
+      }
+    }
+  }
   .leftMenuBox {
     width: 300px;
+    overflow: hidden;
+    .borderHeight.right.active {
+      animation-delay: 2s;
+    }
     .title {
       height: 70px;
       color: #fff;
-      border-bottom: 1px solid #ffffff4d;
+      // border-bottom: 1px solid #ffffff4d;
+      @for $i from 0 to 15 {
+        .active-#{$i} {
+          opacity: 0;
+          animation: fadeInText 0.5s linear forwards;
+          animation-delay: 2.5s + 0.1s * $i;
+        }
+      }
+      .borderWidth.bottom.active {
+        transform-origin: left;
+        animation-delay: 3s;
+      }
     }
     .scrollBox {
       height: 100%;
@@ -24,9 +92,15 @@
         opacity: 1;
         visibility: visible;
         color: #fff;
-        border-bottom: 1px solid #ffffff4d;
+        // border-bottom: 1px solid #ffffff4d;
         cursor: pointer;
         padding-left: 50px;
+        @for $i from 0 to 15 {
+          .borderWidth.bottom.active.active-#{$i} {
+            animation-delay: 3.5s + 0.1s * $i;
+            transform-origin: left;
+          }
+        }
         .arrowIcon {
           position: absolute;
           top: 50%;
@@ -34,6 +108,22 @@
           z-index: 1;
           transform: translateY(-50%) rotate(-90deg);
           fill: #ffffff4d;
+          @for $i from 0 to 15 {
+            &.active.active-#{$i} {
+              opacity: 0;
+              animation: fadeInText 0.5s linear forwards;
+              animation-delay: 3.5s + 0.1s * $i;
+            }
+          }
+        }
+        .headTitle {
+          @for $i from 0 to 15 {
+            &.active.active-#{$i} {
+              opacity: 0;
+              animation: fadeInText 0.5s linear forwards;
+              animation-delay: 3.5s + 0.1s * $i;
+            }
+          }
         }
         &:hover .arrowIcon {
           animation: arrowAnimation 0.5s linear infinite;
@@ -67,7 +157,6 @@
   }
   .rightBox {
     width: calc(100% - 300px);
-    border-left: 1px solid #ffffff4d;
   }
 }
 
@@ -79,5 +168,42 @@
   100% {
     transform: translateX(20px) translateY(-50%) rotate(-90deg);
     opacity: 0;
+  }
+}
+
+@keyframes animateScaleX {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+@keyframes animateScaleY {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+@keyframes changeBG {
+  0% {
+    background: #22222200;
+  }
+
+  10% {
+    background: #7c7c7c80;
+  }
+  100% {
+    background: #22222280;
+  }
+}
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
