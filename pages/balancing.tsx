@@ -1,3 +1,4 @@
+import { HomeButton } from '@components/button';
 import styles from '@styles/balancingpage.module.scss';
 import cn from 'classnames';
 import { useState } from 'react';
@@ -36,7 +37,8 @@ export default function BalancingPage() {
     return styles[active];
   };
   return (
-    <div className="body flexCenter" style={{ background: 'linear-gradient(180deg, #000735, #232323)' }}>
+    <div className="body flexCenter hidden" style={{ background: 'linear-gradient(180deg, #000735, #232323)' }}>
+      <HomeButton />
       <div className={styles.wrapper}>
         <div className={cn(styles.line, getMax())}>
           <div className={cn(styles.left, styles.area, getMax())}>

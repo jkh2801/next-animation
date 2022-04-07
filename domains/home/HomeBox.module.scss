@@ -64,9 +64,7 @@
   .leftMenuBox {
     width: 300px;
     overflow: hidden;
-    .borderHeight.right.active {
-      animation-delay: 2s;
-    }
+
     .title {
       height: 70px;
       color: #fff;
@@ -157,6 +155,10 @@
   }
   .rightBox {
     width: calc(100% - 300px);
+    .borderHeight.left.active {
+      transform-origin: top;
+      animation-delay: 2s;
+    }
   }
 }
 
@@ -205,5 +207,16 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+@media (max-width: 750px) {
+  .container {
+    .leftMenuBox {
+      width: 100%;
+    }
+    .rightBox {
+      display: none;
+    }
   }
 }

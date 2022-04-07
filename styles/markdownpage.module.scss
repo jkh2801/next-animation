@@ -1,0 +1,47 @@
+.container {
+  width: 90%;
+  height: 90%;
+  .box {
+    width: 40%;
+    height: 100%;
+    .title {
+      color: #a6a6a6;
+    }
+    .textBox {
+      width: 100%;
+      height: calc(100% - 45px);
+      padding: 10px 0;
+      background: #fff;
+      border-radius: 5px;
+      textarea {
+        height: 100%;
+        resize: none;
+        padding: 20px;
+      }
+      &.previewer {
+        padding: 20px;
+        user-select: auto;
+        a {
+          color: #00000080;
+          text-decoration: underline;
+        }
+        p {
+          margin-block-start: 1em;
+          margin-block-end: 1em;
+          margin-inline-start: 0px;
+          margin-inline-end: 0px;
+        }
+        ul {
+          margin-block-start: 1em;
+          margin-block-end: 1em;
+          margin-inline-start: 0px;
+          margin-inline-end: 0px;
+          padding-inline-start: 40px;
+          li {
+            list-style: disc;
+          }
+        }
+      }
+    }
+  }
+}

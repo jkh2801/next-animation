@@ -64,7 +64,12 @@ li {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
+.hidden {
+  overflow: hidden;
+}
+.auto {
+  overflow: auto;
+}
 .visible {
   opacity: 1;
   visibility: visible;

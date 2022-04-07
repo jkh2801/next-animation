@@ -21,7 +21,6 @@ const HomeBox: FC<{ status: string; setStatus: SetStateType<string> }> = ({ stat
       <span className={cn(styles.borderWidth, styles.bottom, status && styles.active)}></span>
       <span className={cn(styles.borderHeight, styles.right, status && styles.active)}></span>
       <div className={styles.leftMenuBox}>
-        <span className={cn(styles.borderHeight, styles.right, status && styles.active)}></span>
         <div className="flexColumn">
           <div className={cn('flexCenter gap-1', styles.title)}>
             {'React-Animation'.split('').map((str, idx) => {
@@ -65,7 +64,9 @@ const HomeBox: FC<{ status: string; setStatus: SetStateType<string> }> = ({ stat
           </div>
         </div>
       </div>
-      <div className={styles.rightBox}></div>
+      <div className={styles.rightBox}>
+        <span className={cn(styles.borderHeight, styles.left, status && styles.active)}></span>
+      </div>
     </div>
   );
 };

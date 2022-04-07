@@ -30,9 +30,9 @@ export const routeNames = [
   {
     type: 'ALL',
     name: 'Text',
-    data: ['Neon', 'Text Ex1'],
-    url: ['neon', 'textEx1'],
-    pagetype: ['APP', 'WEB'],
+    data: ['Neon', 'Text Ex1', 'Mark Down'],
+    url: ['neon', 'textEx1', 'markdown'],
+    pagetype: ['APP', 'WEB', 'WEB'],
   },
   {
     type: 'WEB',
