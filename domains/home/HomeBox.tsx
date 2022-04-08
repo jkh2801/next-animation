@@ -5,10 +5,12 @@ import { routeNames } from '@utils/const/routeNames';
 import Link from 'next/link';
 import RoundArrowIcon from '@assets/roundArrowIcon.svg';
 import { SetStateType } from '@customTypes/CommonTypes';
+import { HomeDesc } from './HomeDesc';
 
 const HomeBox: FC<{ status: string; setStatus: SetStateType<string> }> = ({ status, setStatus }) => {
-  console.log(status);
   const [menuState, setMenuState] = useState(-1);
+  const [hoverState, setHoverState] = useState('');
+  console.log(hoverState);
   const handleMenu = (num: number) => {
     setStatus('');
     if (menuState === -1) setMenuState(num);
@@ -52,6 +54,7 @@ const HomeBox: FC<{ status: string; setStatus: SetStateType<string> }> = ({ stat
                           <a
                             className={cn('flexAlignCenter fs-16', styles.sideBox, menuState === idx ? styles.urlAble : styles.urlDisAble)}
                             style={{ display: route.pagetype[i] === 'APP' ? 'none' : 'flex' }}
+                            onMouseEnter={() => setHoverState(route.url[i])}
                           >
                             {str}
                           </a>
@@ -66,6 +69,7 @@ const HomeBox: FC<{ status: string; setStatus: SetStateType<string> }> = ({ stat
       </div>
       <div className={styles.rightBox}>
         <span className={cn(styles.borderHeight, styles.left, status && styles.active)}></span>
+        {hoverState && <HomeDesc descTitle={hoverState} />}
       </div>
     </div>
   );
