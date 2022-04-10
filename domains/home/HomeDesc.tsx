@@ -2,8 +2,12 @@ import { FC, useEffect, useState } from 'react';
 import cn from 'classnames';
 import styles from './HomeDesc.module.scss';
 import { routeDesc } from '@utils/const/routeDesc';
+import Image from 'next/image';
+import mask from '@assets/mask.png';
+import test from '@assets/thumbnail_balancing.png';
 
 export const HomeDesc: FC<{ descTitle: string }> = ({ descTitle }) => {
+  console.log('HomeDesc');
   const [loadStatus, setLoadStatus] = useState(false);
   const [isData, setIsData] = useState(false);
   useEffect(() => {
@@ -13,9 +17,18 @@ export const HomeDesc: FC<{ descTitle: string }> = ({ descTitle }) => {
       setLoadStatus(true);
     }, 500);
   }, [descTitle]);
+  return (
+    <div className={cn('total', styles.container)}>
+      <div className={cn('flexCenter', styles.tvBox)}>
+        <div className={styles.tv}></div>
+      </div>
+    </div>
+  );
   return loadStatus ? (
     isData ? (
-      <div></div>
+      <div className={cn('total', styles.data)}>
+        <Image src={test} alt="" />
+      </div>
     ) : (
       <div className={cn('total flexCenter flexColumn fs-40', styles.noData)}>
         <div>

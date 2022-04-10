@@ -8,9 +8,9 @@ import { SetStateType } from '@customTypes/CommonTypes';
 import { HomeDesc } from './HomeDesc';
 
 const HomeBox: FC<{ status: string; setStatus: SetStateType<string> }> = ({ status, setStatus }) => {
+  console.log('HomeBox');
   const [menuState, setMenuState] = useState(-1);
   const [hoverState, setHoverState] = useState('');
-  console.log(hoverState);
   const handleMenu = (num: number) => {
     setStatus('');
     if (menuState === -1) setMenuState(num);
