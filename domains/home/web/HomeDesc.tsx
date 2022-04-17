@@ -5,7 +5,6 @@ import { routeDesc } from '@utils/const/routeDesc';
 import Image from 'next/image';
 
 export const HomeDesc: FC<{ descTitle: string }> = ({ descTitle }) => {
-  console.log('HomeDesc');
   const [loadStatus, setLoadStatus] = useState(false);
   const [isData, setIsData] = useState(false);
 

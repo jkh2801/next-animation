@@ -7,9 +7,9 @@ import remarkGfm from 'remark-gfm';
 
 export default function MarkdownPage() {
   const [text, setText] = useState('');
-  console.log(text);
   return (
     <div className="body flexCenter hidden" style={{ background: '#faefe5' }}>
+      <HomeButton />
       <div className={cn('flexAroundCenter', styles.container)}>
         <div className={styles.box}>
           <div className={cn('flexCenter number fs-30 fw-500', styles.title)}>Editor</div>
