@@ -42,9 +42,20 @@
       }
     }
   }
-}
-
-.data {
+  .textContainer {
+    padding: 20px 0;
+    .textBox {
+      width: 60vw;
+      max-width: 800px;
+      color: #fff;
+      .textRow {
+        .text {
+          opacity: 0;
+          animation: fadeInText 0.05s linear forwards;
+        }
+      }
+    }
+  }
 }
 
 .noData {
