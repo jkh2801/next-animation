@@ -1,6 +1,6 @@
 import { isBrowser } from 'react-device-detect';
 import { useEffect, useState } from 'react';
-import WebReceiptPage from '@domains/recepit/WebReceiptPage';
+import WebReceiptPage from '@domains/receipt/WebReceiptPage';
 
 export default function RecepitPage() {
   const [browser, setBrowser] = useState(false);
