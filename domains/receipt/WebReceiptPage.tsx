@@ -7,7 +7,7 @@ import styles from './Receipt.module.scss';
 const WebReceiptPage = () => {
   console.log('WebReceiptPage');
 
-  const [isDownload, setIsDownload] = useState(false);
+  const [isDownload, setIsDownload] = useState(true);
   const [info, setInfo] = useState({
     name: 'Shop Name or Shop Address',
     date: dayjs(),
@@ -44,6 +44,7 @@ const WebReceiptPage = () => {
           </div>
           <div className="flexBetweenCenter">
             <span className="number">Date</span>
+            {isDownload ? <span className="number">{info.date.clone().format('YYYY.MM.DD')}</span> : <div></div>}
           </div>
           <div className="flexBetweenCenter">
             <span className="number">Manager</span>
@@ -53,6 +54,11 @@ const WebReceiptPage = () => {
               <input type="text" className={cn('number', styles.input)} value={info.manager} onChange={e => handleSetInfo('manager', e.target.value)} />
             )}
           </div>
+        </div>
+        <p className={cn('fs-20 fw-500 number', styles.subTitle)}>Description</p>
+        <div className={cn(styles.descBox)}></div>
+        <div className={cn('flexBetweenCenter', styles.totalBox)}>
+          <span className="fs-20 fw-500 number">Total</span>
         </div>
       </div>
     </div>

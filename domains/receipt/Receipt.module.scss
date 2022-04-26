@@ -32,11 +32,23 @@
   }
   .headerForm {
     border-bottom: 1px solid #aaa;
-    margin-top: 10px;
+    margin: 10px 0 15px;
     padding-bottom: 10px;
     .input {
-      width: 300px;
+      width: 240px;
       text-align: end;
+      border-bottom: 1px solid #eee;
+      &:hover,
+      &:focus {
+        border-bottom: 1px solid #afafaf;
+      }
     }
+  }
+  .descBox {
+    min-height: 300px;
+    border-bottom: 1px solid #aaa;
+  }
+  .totalBox {
+    height: 40px;
   }
 }
