@@ -1,12 +1,14 @@
 import { HomeButton } from '@components/button';
 import cn from 'classnames';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { toPng } from 'html-to-image';
+import { useEffect, useRef, useState } from 'react';
 import styles from './Receipt.module.scss';
+import DownloadIcon from '@assets/downloadIcon.svg';
 
 const WebReceiptPage = () => {
   console.log('WebReceiptPage');
-
+  const ref = useRef<HTMLDivElement>(null);
   const [isDownload, setIsDownload] = useState(true);
   const [info, setInfo] = useState({
     name: 'Shop Name or Shop Address',
@@ -28,9 +30,28 @@ const WebReceiptPage = () => {
     }
   };
 
+  const clickEvent = () => {
+    if (ref.current === null) {
+      return;
+    }
+    toPng(ref.current, { cacheBust: true })
+      .then(dataUrl => {
+        const link = document.createElement('a');
+        link.download = 'my-image-name.png';
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
-    <div className="body flexCenter" style={{ background: '#7bffa3' }}>
+    <div className="body flexCenter" style={{ background: '#7bffa3' }} ref={ref}>
       <HomeButton />
+      <button className={styles.download} onClick={clickEvent}>
+        <DownloadIcon />
+      </button>
       <div className={styles.container}>
         <p className={cn('fs-30 fw-700 number', styles.title)}>Receipt</p>
         <div className={cn('flexColumn gap-5', styles.headerForm)}>
