@@ -1,0 +1,41 @@
+.container {
+  .cursor {
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    &:hover,
+    &:focus {
+      border-bottom: 1px solid #afafaf;
+    }
+  }
+  .box {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 4px);
+    width: 200px;
+    z-index: 3;
+    background: #fff;
+    border: 1px solid #eee;
+    box-shadow: 0 0 5px #222;
+    padding: 5px;
+    svg {
+      cursor: pointer;
+    }
+    .header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      .text:nth-child(1) {
+        color: #f00;
+      }
+      .text:nth-child(7) {
+        color: #00f;
+      }
+    }
+    .body {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      .content {
+        cursor: pointer;
+      }
+    }
+  }
+}

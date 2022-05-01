@@ -1,58 +1,62 @@
-.container {
-  width: 500px;
-  min-height: 600px;
-  background: #fff;
-  padding: 20px 40px;
-  &::before {
-    content: '';
-    position: absolute;
-    top: -15px;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    display: block;
-    background: linear-gradient(-45deg, transparent 33.33%, #fff 33.33%, #fff 66.666%, transparent 66.66%), linear-gradient(45deg, transparent 33.33%, #fff 33.33%, #fff 66.666%, transparent 66.66%);
-    background-size: 30px 60px;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    display: block;
-    background: linear-gradient(-45deg, transparent 33.33%, #fff 33.33%, #fff 66.666%, transparent 66.66%), linear-gradient(45deg, transparent 33.33%, #fff 33.33%, #fff 66.666%, transparent 66.66%);
-    background-size: 30px 60px;
-    transform: rotate(180deg);
-  }
-  .title {
-    letter-spacing: 5px;
-    border-bottom: 1px solid #aaa;
-  }
-  .headerForm {
-    border-bottom: 1px solid #aaa;
-    margin: 10px 0 15px;
-    padding-bottom: 10px;
-    .input {
-      width: 240px;
-      text-align: end;
-      border-bottom: 1px solid #eee;
-      &:hover,
-      &:focus {
-        border-bottom: 1px solid #afafaf;
+.wrapper {
+  width: 550px;
+  height: 650px;
+  .container {
+    width: 500px;
+    min-height: 600px;
+    background: #fff;
+    padding: 20px 40px;
+    box-shadow: 0 0 50px #2228;
+    &::before {
+      content: '';
+      position: absolute;
+      top: -15px;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      display: block;
+      background: linear-gradient(-45deg, transparent 33.33%, #fff 33.33%, #fff 66.666%, transparent 66.66%), linear-gradient(45deg, transparent 33.33%, #fff 33.33%, #fff 66.666%, transparent 66.66%);
+      background-size: 30px 60px;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      display: block;
+      background: linear-gradient(-45deg, transparent 33.33%, #fff 33.33%, #fff 66.666%, transparent 66.66%), linear-gradient(45deg, transparent 33.33%, #fff 33.33%, #fff 66.666%, transparent 66.66%);
+      background-size: 30px 60px;
+      transform: rotate(180deg);
+    }
+    .title {
+      letter-spacing: 5px;
+      border-bottom: 1px solid #aaa;
+    }
+    .headerForm {
+      border-bottom: 1px solid #aaa;
+      margin: 10px 0 15px;
+      padding-bottom: 10px;
+      .input {
+        width: 240px;
+        text-align: end;
+        border-bottom: 1px solid #eee;
+        &:hover,
+        &:focus {
+          border-bottom: 1px solid #afafaf;
+        }
       }
     }
-  }
-  .descBox {
-    min-height: 300px;
-    border-bottom: 1px solid #aaa;
-  }
-  .totalBox {
-    height: 40px;
+    .descBox {
+      min-height: 300px;
+      border-bottom: 1px solid #aaa;
+    }
+    .totalBox {
+      height: 40px;
+    }
   }
 }
-
 .download {
   position: absolute;
   top: 10px;
