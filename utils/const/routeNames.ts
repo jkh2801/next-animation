@@ -4,7 +4,7 @@ export const routeNames = [
     name: 'Animation',
     data: ['Balancing', 'Receipt'],
     url: ['balancing', 'receipt'],
-    pagetype: ['WEB', 'ALL'],
+    pagetype: ['WEB', 'WEB'],
   },
   {
     type: 'WEB',

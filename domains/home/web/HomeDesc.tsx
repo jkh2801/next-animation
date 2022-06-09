@@ -28,7 +28,7 @@ export const HomeDesc: FC<{ descTitle: string }> = ({ descTitle }) => {
             <div className={cn(styles.bg, loadStatus && styles.active)}></div>
             {loadStatus &&
               (isData ? (
-                <div>{routeDesc.hasOwnProperty(descTitle) && <Image src={routeDesc[descTitle].thumbnail} alt="" />}</div>
+                <div>{routeDesc.hasOwnProperty(descTitle) && <Image src={routeDesc[descTitle].thumbnail} alt="" width={754} height={352} />}</div>
               ) : (
                 <div className={cn('total flexCenter flexColumn fs-40', styles.noData)}>
                   <div>
