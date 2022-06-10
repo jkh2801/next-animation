@@ -8,6 +8,13 @@ export const routeNames = [
   },
   {
     type: 'WEB',
+    name: 'Drag & Drop',
+    data: ['React-Draggable'],
+    url: ['draggable'],
+    pagetype: ['WEB'],
+  },
+  {
+    type: 'WEB',
     name: 'MarkDown',
     data: ['React-Markdown'],
     url: ['markdown'],

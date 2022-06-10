@@ -44,14 +44,14 @@ const HomeBox: FC<{ status: string; setStatus: SetStateType<string> }> = ({ stat
                       onClick={() => handleMenu(idx)}
                     >
                       <RoundArrowIcon className={cn(styles.arrowIcon, status && styles.active, status && styles['active-' + idx])} />
-                      <span className={cn('flex gap-1', styles.headTitle, status && styles.active, status && styles['active-' + idx])}>{route.name}</span>
+                      <span className={cn('flex gap-1 number', styles.headTitle, status && styles.active, status && styles['active-' + idx])}>{route.name}</span>
                       <span className={cn(styles.borderWidth, styles.bottom, status && styles.active, status && styles['active-' + idx])}></span>
                     </div>
                     {route.data.map((str, i) => {
                       return (
                         <Link key={i} href={route.url[i]}>
                           <a
-                            className={cn('flexAlignCenter fs-16', styles.sideBox, menuState === idx ? styles.urlAble : styles.urlDisAble)}
+                            className={cn('flexAlignCenter fs-16 number', styles.sideBox, menuState === idx ? styles.urlAble : styles.urlDisAble)}
                             style={{ display: route.pagetype[i] === 'APP' ? 'none' : 'flex' }}
                             onMouseEnter={() => setHoverState(route.url[i])}
                           >
