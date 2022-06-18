@@ -2,9 +2,9 @@ export const routeNames = [
   {
     type: 'ALL',
     name: 'Animation',
-    data: ['Balancing', 'Receipt'],
-    url: ['balancing', 'receipt'],
-    pagetype: ['WEB', 'WEB'],
+    data: ['Balancing', 'Ghost Leg', 'Receipt'],
+    url: ['balancing', 'ghostleg', 'receipt'],
+    pagetype: ['WEB', 'ALL', 'WEB'],
   },
   {
     type: 'WEB',
