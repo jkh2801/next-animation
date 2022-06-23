@@ -1,4 +1,5 @@
 .container {
+  position: relative;
   width: 80%;
   height: 80%;
   border: 1px solid #bbb;
@@ -6,5 +7,37 @@
     width: 100%;
     height: 100%;
     display: block;
+  }
+  .blockBox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+    .numBox {
+      .btnBox {
+        width: 44px;
+        height: 44px;
+        button {
+          width: 44px;
+          height: 44px;
+          svg {
+            width: 22px;
+            height: 22px;
+            transform: scale(2);
+          }
+        }
+      }
+      .inputBox {
+        width: 100px;
+        border-bottom: 2px solid #222;
+        input {
+          text-align: center;
+          height: 40px;
+          padding: 0;
+        }
+      }
+    }
   }
 }
