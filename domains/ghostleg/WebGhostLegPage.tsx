@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './GhostLeg.module.scss';
 import LeftArrowIcon from '@assets/leftArrowIcon.svg';
 import RightArrowIcon from '@assets/rightArrowIcon.svg';
+import { RoundButton } from '@components/button';
+import { SettingNum } from './web';
 
 type DataType = {
   x: number;
@@ -98,30 +100,7 @@ const WebGhostLegPage = () => {
     <div className="body flexCenter hidden">
       <div className={styles.container}>
         <canvas id="canvas" ref={canvas} />
-        {status === 'settingNum' && (
-          <div className={cn('flexCenter', styles.blockBox)}>
-            <div className={cn('flexColumn gap-20')}>
-              <span className="flexCenter fs-40 fw-700">사다리타기</span>
-              <div className={cn('flexCenter gap-20', styles.numBox)}>
-                <div className={styles.btnBox}>
-                  {option.line > 1 && (
-                    <button className="flexCenter" onClick={() => setLine(option.line - 1)}>
-                      <LeftArrowIcon />
-                    </button>
-                  )}
-                </div>
-                <div className={styles.inputBox}>
-                  <input type="number" value={option.line} className="number fs-30 fw-700" min={1} onChange={e => setLine(Number(e.target.value))} />
-                </div>
-                <div className={styles.btnBox}>
-                  <button className="flexCenter" onClick={() => setLine(option.line + 1)}>
-                    <RightArrowIcon />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {status === 'settingNum' && <SettingNum option={option} setLine={setLine} setStatus={setStatus} />}
       </div>
     </div>
   );

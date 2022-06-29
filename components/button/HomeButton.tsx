@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import cn from 'classnames';
 import styles from './HomeButton.module.scss';
 import HouseIcon from '@assets/houseIcon.svg';
 

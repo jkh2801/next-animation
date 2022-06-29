@@ -1,0 +1,1 @@
+export { SettingNum } from './Setting';
