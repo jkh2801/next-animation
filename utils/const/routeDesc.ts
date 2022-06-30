@@ -2,6 +2,7 @@ import balancing from '@assets/thumbnail_balancing.png';
 import markdown from '@assets/thumbnail_markdown.png';
 import receipt from '@assets/thumbnail_receipt.png';
 import draggable from '@assets/thumbnail_draggable.png';
+import digital from '@assets/thumbnail_digital.gif';
 import { RouteDescType } from '@customTypes/HomeTypes';
 
 export const routeDesc: RouteDescType = {
@@ -10,6 +11,11 @@ export const routeDesc: RouteDescType = {
     desc: `Balancing Page
     This is a simple design page. I just wanted to express the scale of both arms according to the weight. 
     Please enter a number on the scale. You can enter only natural numbers on a scale. You'll be able to see the dynamic changes with the number of inputs.`,
+  },
+  digital: {
+    thumbnail: digital,
+    desc: `Digital Page
+    This is an animation page using canvas tags. You can check the repetition of the animation in the canvas. You can refer to the canvas process in the react component.`,
   },
   draggable: {
     thumbnail: draggable,
