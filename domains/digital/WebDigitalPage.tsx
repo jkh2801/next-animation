@@ -1,3 +1,4 @@
+import { HomeButton } from '@components/button';
 import { useEffect, useRef } from 'react';
 import styles from './Digital.module.scss';
 
@@ -50,6 +51,7 @@ const WebDigitalPage = () => {
   };
   return (
     <div className="body flexCenter hidden">
+      <HomeButton />
       <div className={styles.container}>
         <canvas id="canvas" ref={canvas} />
       </div>
