@@ -3,6 +3,7 @@ import markdown from '@assets/thumbnail_markdown.png';
 import receipt from '@assets/thumbnail_receipt.png';
 import draggable from '@assets/thumbnail_draggable.png';
 import digital from '@assets/thumbnail_digital.gif';
+import particle from '@assets/thumbnail_particle.gif';
 import { RouteDescType } from '@customTypes/HomeTypes';
 
 export const routeDesc: RouteDescType = {
@@ -28,6 +29,11 @@ export const routeDesc: RouteDescType = {
     thumbnail: markdown,
     desc: `Markdown Page
     This is a markdown preview page. It is designed for the purpose of testing the react-markdown library.`,
+  },
+  particle: {
+    thumbnail: particle,
+    desc: `Particle Page
+    This is an animation page using canvas tags. You can check the repetition of the animation in the canvas. You can refer to the canvas process in the react component.`,
   },
   receipt: {
     thumbnail: receipt,
