@@ -12,7 +12,7 @@ const WebLoadingEx1Page = () => {
     x: 0,
     y: 0,
     radius: 90,
-    speed: 2,
+    speed: 5,
     rotation: 0,
     angleStart: 270,
     angleEnd: 90,

@@ -4,6 +4,7 @@ import receipt from '@assets/thumbnail_receipt.png';
 import draggable from '@assets/thumbnail_draggable.png';
 import digital from '@assets/thumbnail_digital.gif';
 import particle from '@assets/thumbnail_particle.gif';
+import loadingEx1 from '@assets/thumbnail_loadingEx1.gif';
 import { RouteDescType } from '@customTypes/HomeTypes';
 
 export const routeDesc: RouteDescType = {
@@ -23,6 +24,11 @@ export const routeDesc: RouteDescType = {
     desc: `Draggable Page
     This is a simple draggable page. It is designed for the purpose of testing the react-draggable library.
     Please drag the contents in the box. You will be able to check the smooth drag movement.`,
+  },
+  loadingex1: {
+    thumbnail: loadingEx1,
+    desc: `Loading Page
+    This is an animation page using canvas tags. You can check the repetition of the animation in the canvas. You can refer to the canvas process in the react component.`,
   },
 
   markdown: {

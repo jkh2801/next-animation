@@ -13,10 +13,8 @@ const WebDigitalPage = () => {
   useEffect(() => {
     const canvasEle: any = canvas.current;
     ctx = canvasEle.getContext('2d');
-    canvasEle.width = canvasEle.clientWidth;
-    canvasEle.height = canvasEle.clientHeight;
-    width = canvasEle.clientWidth;
-    height = canvasEle.clientHeight;
+    width = canvasEle.width = canvasEle.clientWidth;
+    height = canvasEle.height = canvasEle.clientHeight;
     setArray();
     animate();
   }, []);
@@ -29,7 +27,7 @@ const WebDigitalPage = () => {
   };
   const animate = () => {
     requestAnimationFrame(animate);
-    ctx.fillStyle = 'rgba(0,0,0,0.1)';
+    ctx.fillStyle = '#0000001a';
     ctx.fillRect(0, 0, width, height);
     Array(columns)
       .fill(0)
@@ -41,7 +39,7 @@ const WebDigitalPage = () => {
     const characters = '01';
     ctx.fillStyle = 'green';
     ctx.font = fontSize + 'px arial';
-    var symbol = characters.charAt(Math.floor(Math.random() * characters.length));
+    var symbol = characters.charAt(~~(Math.random() * characters.length));
     ctx.fillText(symbol, x * fontSize, item.y * fontSize);
     if (item.y * fontSize > height && Math.random() > 0.95) {
       item.y = 0;
