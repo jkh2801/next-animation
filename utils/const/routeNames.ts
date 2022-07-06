@@ -15,6 +15,13 @@ export const routeNames = [
   },
   {
     type: 'WEB',
+    name: 'Game',
+    data: ['Tetris'],
+    url: ['tetris'],
+    pagetype: ['WEB'],
+  },
+  {
+    type: 'WEB',
     name: 'MarkDown',
     data: ['React-Markdown'],
     url: ['markdown'],

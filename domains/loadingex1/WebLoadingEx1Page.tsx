@@ -1,6 +1,5 @@
 import { HomeButton } from '@components/button';
 import { useEffect, useRef } from 'react';
-import { setInterval } from 'timers';
 import styles from './LoadingEx1.module.scss';
 
 const WebLoadingEx1Page = () => {
@@ -151,7 +150,7 @@ const WebLoadingEx1Page = () => {
     <div className="body flexCenter hidden">
       <HomeButton />
       <div className={styles.container}>
-        <canvas id="canvas" ref={canvas} />
+        <canvas ref={canvas} />
       </div>
     </div>
   );

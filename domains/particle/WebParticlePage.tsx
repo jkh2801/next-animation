@@ -104,7 +104,7 @@ export const WebParticlePage = () => {
     <div className="body flexCenter hidden">
       <HomeButton />
       <div className={styles.container}>
-        <canvas id="canvas" ref={canvas} />
+        <canvas ref={canvas} />
       </div>
     </div>
   );

@@ -1,0 +1,15 @@
+.container {
+  padding: 10px;
+  border: 2px solid #fff;
+  background: #081c2f;
+  canvas {
+    display: block;
+    border: 2px solid #fff;
+  }
+  .lineBox {
+    background: #fff;
+    border: 2px solid #fff;
+    width: 100px;
+    height: 100px;
+  }
+}
