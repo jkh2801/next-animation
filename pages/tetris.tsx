@@ -2,6 +2,7 @@ import { HomeButton } from '@components/button';
 import { useEffect, useRef, useState } from 'react';
 import styles from '@styles/tetrispage.module.scss';
 import cn from 'classnames';
+import CrownIcon from '@assets/crownIcon.svg';
 
 export default function TetrisPage() {
   console.log('TetrisPage');
@@ -12,7 +13,8 @@ export default function TetrisPage() {
     score: 0,
   });
   let ctx: any;
-  const colors = [null, '#a4b0be', '#ff6b81', '#1abc9c', '#34495e', '#9b59b6', '#e74c3c', '#f1c40f'];
+  const colors = [null, '#FF0000', '#FF00C7', '#43FFDA', '#00D1FF', '#B500FF', '#FFF500', '#FFB800'];
+  let status = true;
   const createPiece = () => {
     const pieces = 'ILJOTSZ';
     const type = pieces[~~(Math.random() * pieces.length)];
@@ -89,14 +91,16 @@ export default function TetrisPage() {
   }, []);
 
   const animate = (time = 0) => {
-    requestAnimationFrame(animate);
-    const deltaTime = time - lastTime;
-    lastTime = time;
-    dropCounter += deltaTime;
-    if (dropCounter > dropInterval) {
-      playerDrop();
+    if (status) {
+      requestAnimationFrame(animate);
+      const deltaTime = time - lastTime;
+      lastTime = time;
+      dropCounter += deltaTime;
+      if (dropCounter > dropInterval) {
+        playerDrop();
+      }
+      draw();
     }
-    draw();
   };
 
   const playerDrop = () => {
@@ -137,10 +141,11 @@ export default function TetrisPage() {
     player.pos.y = 0;
     player.pos.x = 5;
     if (collide(arena, player)) {
-      arena.forEach(row => row.fill(0));
-      setting.score = 0;
+      status = false;
+      // arena.forEach(row => row.fill(0));
+      // setting.score = 0;
+      // setSetting({ ...setting });
     }
-    setSetting({ ...setting });
   };
 
   const arenaSwipe = () => {
@@ -149,6 +154,7 @@ export default function TetrisPage() {
         arena.splice(i, 1);
         arena.unshift(new Array(ele.length).fill(0));
         setting.score++;
+        if (dropInterval > 100) dropInterval -= 100;
       }
     });
     setSetting({ ...setting });
@@ -221,9 +227,12 @@ export default function TetrisPage() {
       <HomeButton />
       <div className={cn('flex gap-10', styles.container)}>
         <canvas width="240" height="400" ref={canvas} />
-        <div className={cn('flexCenter flexColumn gap-5', styles.lineBox)}>
-          <div className="number fs-30">{setting.score}</div>
-          <div className="number fs-20">Lines</div>
+        <div className="flexColumn flexBetweenCenter">
+          <div className={cn('flexCenter flexColumn gap-5', styles.lineBox)}>
+            <div className="number fs-30">{setting.score}</div>
+            <div className="number fs-20">Lines</div>
+          </div>
+          <div className={cn('flexCenter', styles.iconBox)}>{setting.score >= 15 && <CrownIcon />}</div>
         </div>
       </div>
     </div>

@@ -12,4 +12,9 @@
     width: 100px;
     height: 100px;
   }
+  .iconBox {
+    width: 100px;
+    height: calc(100% - 100px);
+    filter: drop-shadow(0 0 30px #fff);
+  }
 }
