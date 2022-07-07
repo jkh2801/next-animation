@@ -5,6 +5,7 @@ import draggable from '@assets/thumbnail_draggable.png';
 import digital from '@assets/thumbnail_digital.gif';
 import particle from '@assets/thumbnail_particle.gif';
 import loadingEx1 from '@assets/thumbnail_loadingEx1.gif';
+import tetris from '@assets/thumbnail_tetris.gif';
 import { RouteDescType } from '@customTypes/HomeTypes';
 
 export const routeDesc: RouteDescType = {
@@ -46,5 +47,10 @@ export const routeDesc: RouteDescType = {
     desc: `Receipt Page
     This is a simple design page. It is designed for the purpose of testing the HTML-to-image library. 
     Write your own receipt through a simple UI. And experience the download function.`,
+  },
+  tetris: {
+    thumbnail: tetris,
+    desc: `Tetris Page
+    This page is a Tetris game using canvas tags.`,
   },
 };
