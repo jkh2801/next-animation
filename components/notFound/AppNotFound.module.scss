@@ -1,0 +1,13 @@
+.wrapper {
+  position: relative;
+  background: #ffc44e;
+  .container {
+    color: #fff;
+    .textBox {
+      width: 250px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #fff;
+      margin-bottom: 10px;
+    }
+  }
+}
