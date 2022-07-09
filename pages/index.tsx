@@ -1,6 +1,7 @@
 import { isBrowser } from 'react-device-detect';
 import WebHomePage from '@domains/home/WebHomePage';
 import { useEffect, useState } from 'react';
+import AppHomePage from '@domains/home/AppHomePage';
 
 export default function HomePage() {
   console.log('Home');
@@ -8,5 +9,5 @@ export default function HomePage() {
   useEffect(() => {
     setBrowser(isBrowser);
   }, []);
-  return browser ? <WebHomePage /> : <div></div>;
+  return browser ? <WebHomePage /> : <AppHomePage />;
 }

@@ -1,0 +1,85 @@
+.container {
+  position: absolute;
+  top: 60px;
+  bottom: 60px;
+  left: 5vw;
+  right: 5vw;
+  background: #22222280;
+  overflow: hidden;
+  .borderWidth {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #ffffff4d;
+    &.top {
+      top: 0;
+    }
+    &.bottom {
+      bottom: 0;
+    }
+  }
+  .borderHeight {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: #ffffff4d;
+    &.left {
+      left: 0;
+    }
+    &.right {
+      right: 0;
+    }
+  }
+  .leftMenuBox {
+    border: 1px solid #ffffff4d;
+    width: 100%;
+    overflow: hidden;
+    .title {
+      height: 70px;
+      color: #fff;
+    }
+    .scrollBox {
+      height: 100%;
+      overflow: hidden;
+      .menuBox {
+        height: 60px;
+        color: #fff;
+        cursor: pointer;
+        padding-left: 50px;
+        .arrowIcon {
+          position: absolute;
+          top: 50%;
+          left: 0px;
+          z-index: 1;
+          transform: translateY(-50%) rotate(-90deg);
+          fill: #ffffff4d;
+        }
+        &.urlAble.active .arrowIcon {
+          transform: translateY(-50%) rotate(0deg);
+        }
+      }
+      .sideBox {
+        color: #fff;
+        border-bottom: 1px solid #ffffff4d;
+        cursor: pointer;
+        padding-left: 50px;
+      }
+      .urlAble {
+        opacity: 1;
+        visibility: visible;
+        height: 60px;
+      }
+      .urlDisAble {
+        opacity: 0;
+        visibility: hidden;
+        height: 0;
+        border: none;
+      }
+    }
+  }
+  .rightBox {
+    width: calc(100% - 300px);
+  }
+}

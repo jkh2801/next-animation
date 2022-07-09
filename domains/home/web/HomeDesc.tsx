@@ -4,7 +4,7 @@ import styles from './HomeDesc.module.scss';
 import { routeDesc } from '@utils/const/routeDesc';
 import Image from 'next/image';
 
-export const HomeDesc: FC<{ descTitle: string }> = ({ descTitle }) => {
+export const WebHomeDesc: FC<{ descTitle: string }> = ({ descTitle }) => {
   const [loadStatus, setLoadStatus] = useState(false);
   const [isData, setIsData] = useState(false);
 
