@@ -13,6 +13,11 @@ type PropTypes = {
 };
 
 export const SettingNum: FC<PropTypes> = ({ option, setLine, setStatus }) => {
+  const MIN = 1;
+
+  const handleSetStart = () => {
+    if (option.line >= MIN) setStatus('settingInput');
+  };
   return (
     <div className={cn('flexCenter', styles.settingNum)}>
       <div className={cn('flexColumn gap-20')}>
@@ -26,7 +31,7 @@ export const SettingNum: FC<PropTypes> = ({ option, setLine, setStatus }) => {
             )}
           </div>
           <div className={styles.inputBox}>
-            <input type="number" value={option.line} className="number fs-30 fw-700" min={1} onChange={e => setLine(Number(e.target.value))} />
+            <input type="number" value={option.line} className="number fs-30 fw-700" min={MIN} onChange={e => setLine(Number(e.target.value))} />
           </div>
           <div className={styles.btnBox}>
             <button className="flexCenter" onClick={() => setLine(option.line + 1)}>
@@ -35,7 +40,7 @@ export const SettingNum: FC<PropTypes> = ({ option, setLine, setStatus }) => {
           </div>
         </div>
         <div className="flexCenter">
-          <RoundButton text="START" clickEvent={() => setStatus('settingInput')} styleType="typeA" width={150} />
+          <RoundButton text="START" clickEvent={handleSetStart} styleType="typeA" width={150} />
         </div>
       </div>
     </div>

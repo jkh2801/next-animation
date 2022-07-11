@@ -5,7 +5,7 @@ const AppHomePage = () => {
   console.log('AppHomePage');
   return (
     <div className="body flexCenter">
-      <video src="/video/bg.mp4" autoPlay loop muted className={styles.bgVideo} />
+      <video src="/video/bg.mp4" autoPlay loop muted playsInline className={styles.bgVideo} />
       <AppHomeBox />
     </div>
   );
