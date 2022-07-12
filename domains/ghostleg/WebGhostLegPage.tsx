@@ -19,8 +19,14 @@ type DataType = {
 
 const WebGhostLegPage = () => {
   const canvas = useRef(null);
-  const input = useRef(null);
-  const [text, setText] = useState('');
+  const input = useRef<HTMLInputElement>(null);
+  let inputType = {
+    idx: 0,
+    type: 'start',
+  };
+  const [info, setInfo] = useState({
+    text: '',
+  });
 
   let ctx: CanvasRenderingContext2D;
   let width: number;
@@ -33,7 +39,7 @@ const WebGhostLegPage = () => {
   const areaWidth = 200;
 
   const [option, setOption] = useState({
-    line: 20,
+    line: 3,
   });
   const [status, setStatus] = useState('settingNum');
   let camera = {
@@ -74,13 +80,56 @@ const WebGhostLegPage = () => {
       let cursor = 'default';
       const { offsetX, offsetY } = e;
       data.forEach((ghostleg: GhostLeg) => {
-        if (ghostleg.isStartInputPos(offsetX, offsetY)) cursor = 'text';
+        if (ghostleg.isStartInputPos(offsetX, offsetY) || ghostleg.isEndInputPos(offsetX, offsetY)) cursor = 'text';
       });
       canvasEle.style.cursor = cursor;
+    });
+    canvasEle.addEventListener('mousedown', (e: MouseEvent) => {
+      const { offsetX, offsetY } = e;
+      const inputEle: any = input.current;
+      let status = false;
+      if (inputEle.value) {
+        data[inputType.idx].setText(inputType.type, inputEle.value);
+        setInfo({ ...info, text: '' });
+      }
+      data.forEach((ghostleg: GhostLeg, idx: number) => {
+        if (ghostleg.isStartInputPos(offsetX, offsetY)) {
+          status = true;
+          const { startInput } = ghostleg;
+          inputEle.style.display = 'block';
+          inputEle.style.left = startInput.x + 'px';
+          inputEle.style.top = startInput.y + 'px';
+          inputType = {
+            idx: idx,
+            type: 'start',
+          };
+          setInfo({ ...info, text: ghostleg.startInput.text });
+          return;
+        }
+        if (ghostleg.isEndInputPos(offsetX, offsetY)) {
+          status = true;
+          const { endInput } = ghostleg;
+          inputEle.style.display = 'block';
+          inputEle.style.left = endInput.x + 'px';
+          inputEle.style.top = endInput.y + 'px';
+          inputType = {
+            idx: idx,
+            type: 'end',
+          };
+          setInfo({ ...info, text: ghostleg.endInput.text });
+          return;
+        }
+      });
+      if (!status) {
+        inputEle.style.display = 'none';
+        inputEle.style.left = 1000 + 'px';
+        inputEle.style.top = 1000 + 'px';
+      }
     });
   };
 
   const animate = () => {
+    requestAnimationFrame(animate);
     ctx.clearRect(0, 0, width, height);
     data.forEach((ghostleg: GhostLeg) => {
       ghostleg.draw(ctx);
@@ -130,7 +179,7 @@ const WebGhostLegPage = () => {
       <div className={styles.container}>
         {status === 'settingNum' && <SettingNum option={option} setLine={setLine} setStatus={setStatus} />}
         <canvas ref={canvas} />
-        <input className={styles.refInput} type="text" value={text} onChange={e => setText(e.target.value)} ref={input} />
+        <input className={styles.inputRef} type="text" value={info.text} onChange={e => setInfo({ ...info, text: e.target.value })} ref={input} />
       </div>
     </div>
   );

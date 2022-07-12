@@ -3,8 +3,14 @@
   width: 80%;
   height: 80%;
   border: 1px solid #bbb;
-  .refInput {
-    opacity: 0;
+  .inputRef {
+    position: absolute;
+    display: none;
+    top: 100%;
+    left: 100%;
+    width: 100px;
+    height: 5%;
+    text-align: center;
   }
   canvas {
     width: 100%;
