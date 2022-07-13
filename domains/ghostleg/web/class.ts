@@ -1,24 +1,28 @@
 export class GhostLeg {
   x: number;
-  y: number;
   width: number;
   height: number;
   areaWidth = 200;
   startInput = {
     x: 0,
     y: 0,
-    text: 'dddd',
+    text: '',
   };
   endInput = {
     x: 0,
     y: 0,
     text: '',
   };
+  close = {
+    x: 0,
+    y: 0,
+  };
+  targetPosX: number;
   defaultLineWidth = 3;
   defaultLineColor = '#A6ABCA';
-  constructor(x = 0, y = 0, width: number, height: number) {
+  defaultSpeed = 5;
+  constructor(x = 0, width: number, height: number) {
     this.x = x;
-    this.y = y;
     this.width = width;
     this.height = height;
     const idx_x = x + this.areaWidth / 2;
@@ -32,6 +36,7 @@ export class GhostLeg {
       y: height * 0.8,
       text: '',
     };
+    this.targetPosX = x;
   }
 
   draw = (ctx: CanvasRenderingContext2D) => {
@@ -70,6 +75,23 @@ export class GhostLeg {
     ctx.fillStyle = '#000';
     ctx.font = '14px sans-serif';
     ctx.fillText(this.endInput.text, this.endInput.x + 50, this.height * 0.825);
+    // close
+    ctx.beginPath();
+    ctx.strokeStyle = '#222';
+    ctx.lineWidth = 1;
+    ctx.moveTo(100, 100);
+    ctx.lineTo(120, 120);
+    ctx.moveTo(100, 120);
+    ctx.lineTo(120, 100);
+    ctx.stroke();
+    ctx.closePath();
+    if (Math.abs(this.targetPosX - this.x) >= 1 + this.defaultSpeed) {
+      const dir = Math.sign(this.targetPosX - this.x);
+      const vel = dir * this.defaultSpeed;
+      this.x += vel;
+      this.startInput.x += vel;
+      this.endInput.x += vel;
+    }
   };
 
   isStartInputPos = (offsetX: number, offsetY: number) => {
@@ -88,6 +110,10 @@ export class GhostLeg {
   setText = (type: string, text: string) => {
     if (type === 'start') this.startInput.text = text;
     else this.endInput.text = text;
+  };
+
+  setTargetPosX = (x: number) => {
+    this.targetPosX += x;
   };
 }
 
@@ -112,9 +138,9 @@ export class Step {
     this.startIdx = nextIdx;
     return nextIdx;
   };
-  PrevPos = () => {
+  prevPos = () => {
     let prevIdx = 0;
-    if (this.startIdx > 0) prevIdx = this.startIdx - this.cnt;
+    if (this.startIdx - this.cnt > 0) prevIdx = this.startIdx - this.cnt;
     this.startIdx = prevIdx;
     return prevIdx;
   };

@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import styles from './GhostLeg.module.scss';
 import { SettingNum } from './web';
-import { GhostLeg } from './web/class';
+import { GhostLeg, Step } from './web/class';
 
 type DataType = {
   x: number;
@@ -39,9 +39,10 @@ const WebGhostLegPage = () => {
   const areaWidth = 200;
 
   const [option, setOption] = useState({
-    line: 3,
+    line: 7,
   });
   const [status, setStatus] = useState('settingNum');
+  let step: Step;
   let camera = {
     x: 0,
     y: 0,
@@ -64,6 +65,7 @@ const WebGhostLegPage = () => {
     width = canvasEle.width = canvasEle.clientWidth;
     height = canvasEle.height = canvasEle.clientHeight;
     cnt = ~~(width / areaWidth);
+    step = new Step(option.line, cnt);
     console.log(cnt);
     Array(option.line)
       .fill(1)
@@ -74,7 +76,7 @@ const WebGhostLegPage = () => {
           if (idx < cnt) posX = (width - cnt * areaWidth) / 2 + idx * areaWidth;
           else posX = (width - cnt * areaWidth) / 2 + cnt * areaWidth + (idx - cnt) * areaWidth;
         }
-        data.push(new GhostLeg(posX, 0, width, height));
+        data.push(new GhostLeg(posX, width, height));
       });
     canvasEle.addEventListener('mousemove', (e: MouseEvent) => {
       let cursor = 'default';
@@ -82,6 +84,8 @@ const WebGhostLegPage = () => {
       data.forEach((ghostleg: GhostLeg) => {
         if (ghostleg.isStartInputPos(offsetX, offsetY) || ghostleg.isEndInputPos(offsetX, offsetY)) cursor = 'text';
       });
+      if (isCursor(width - 44, height * 0.45 - 9, width - 16, height * 0.45 + 9, offsetX, offsetY) && step.isNext()) cursor = 'pointer';
+      if (isCursor(16, height * 0.45 - 9, 44, height * 0.45 + 9, offsetX, offsetY) && step.isPrev()) cursor = 'pointer';
       canvasEle.style.cursor = cursor;
     });
     canvasEle.addEventListener('mousedown', (e: MouseEvent) => {
@@ -125,6 +129,25 @@ const WebGhostLegPage = () => {
         inputEle.style.left = 1000 + 'px';
         inputEle.style.top = 1000 + 'px';
       }
+      if (isCursor(width - 44, height * 0.45 - 9, width - 16, height * 0.45 + 9, offsetX, offsetY) && step.isNext()) {
+        const curIdx = step.startIdx;
+        const nextIdx = step.nextPos();
+        const curX = data[curIdx].x;
+        const nextX = data[nextIdx].x;
+        data.forEach((ghostleg: GhostLeg) => {
+          ghostleg.setTargetPosX(curX - nextX);
+        });
+      }
+      if (isCursor(16, height * 0.45 - 9, 44, height * 0.45 + 9, offsetX, offsetY) && step.isPrev()) {
+        const curIdx = step.startIdx;
+        const nextIdx = step.prevPos();
+        console.log(curIdx, nextIdx);
+        const curX = data[curIdx].x;
+        const nextX = data[nextIdx].x;
+        data.forEach((ghostleg: GhostLeg) => {
+          ghostleg.setTargetPosX(curX - nextX);
+        });
+      }
     });
   };
 
@@ -134,17 +157,35 @@ const WebGhostLegPage = () => {
     data.forEach((ghostleg: GhostLeg) => {
       ghostleg.draw(ctx);
     });
-    console.log(data);
+    if (step.isPrev()) drawPrev();
+    if (step.isNext()) drawNext();
     // drawLine();
   };
 
+  const drawPrev = () => {
+    // prevBtn
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#000';
+    ctx.font = '14px sans-serif';
+    ctx.fillText('이전', 30, height * 0.45);
+  };
+
+  const drawNext = () => {
+    // nextBtn
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#000';
+    ctx.font = '14px sans-serif';
+    ctx.fillText('다음', width - 30, height * 0.45);
+  };
   const drawLine = () => {
     const line = option.line;
     for (let i = 0; i < line; i++) {
       let startPosX = (i / line) * width + ((1 / line) * width) / 2;
       console.log(startPosX);
       ctx.save();
-      ctx.translate(camera.x, camera.y);
+      // ctx.translate(camera.x, camera.y);
       ctx.beginPath();
       ctx.lineWidth = defaultLineWidth;
       ctx.strokeStyle = defaultLineColor;
@@ -172,6 +213,13 @@ const WebGhostLegPage = () => {
 
   const setLine = (num: number) => {
     if (num > 0) setOption({ ...option, line: num });
+  };
+
+  const isCursor = (x1: number, y1: number, x2: number, y2: number, x: number, y: number) => {
+    const isX = x1 <= x && x <= x2;
+    const isY = y1 <= y && y <= y2;
+    if (isX && isY) return true;
+    return false;
   };
 
   return (
