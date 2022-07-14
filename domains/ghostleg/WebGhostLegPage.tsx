@@ -83,6 +83,7 @@ const WebGhostLegPage = () => {
       const { offsetX, offsetY } = e;
       data.forEach((ghostleg: GhostLeg) => {
         if (ghostleg.isStartInputPos(offsetX, offsetY) || ghostleg.isEndInputPos(offsetX, offsetY)) cursor = 'text';
+        if (ghostleg.isClose(offsetX, offsetY)) cursor = 'pointer';
       });
       if (isCursor(width - 44, height * 0.45 - 9, width - 16, height * 0.45 + 9, offsetX, offsetY) && step.isNext()) cursor = 'pointer';
       if (isCursor(16, height * 0.45 - 9, 44, height * 0.45 + 9, offsetX, offsetY) && step.isPrev()) cursor = 'pointer';
@@ -92,6 +93,10 @@ const WebGhostLegPage = () => {
       const { offsetX, offsetY } = e;
       const inputEle: any = input.current;
       let status = false;
+      let close = {
+        status: false,
+        id: '',
+      };
       if (inputEle.value) {
         data[inputType.idx].setText(inputType.type, inputEle.value);
         setInfo({ ...info, text: '' });
@@ -123,7 +128,20 @@ const WebGhostLegPage = () => {
           setInfo({ ...info, text: ghostleg.endInput.text });
           return;
         }
+        if (ghostleg.isClose(offsetX, offsetY)) {
+          close = {
+            status: true,
+            id: ghostleg.id,
+          };
+          return;
+        }
       });
+
+      if (close.status) {
+        data = data.filter((g: GhostLeg) => g.id !== close.id);
+        updateLine(data.length);
+      }
+
       if (!status) {
         inputEle.style.display = 'none';
         inputEle.style.left = 1000 + 'px';
@@ -179,37 +197,19 @@ const WebGhostLegPage = () => {
     ctx.font = '14px sans-serif';
     ctx.fillText('다음', width - 30, height * 0.45);
   };
-  const drawLine = () => {
-    const line = option.line;
-    for (let i = 0; i < line; i++) {
-      let startPosX = (i / line) * width + ((1 / line) * width) / 2;
-      console.log(startPosX);
-      ctx.save();
-      // ctx.translate(camera.x, camera.y);
-      ctx.beginPath();
-      ctx.lineWidth = defaultLineWidth;
-      ctx.strokeStyle = defaultLineColor;
-      ctx.moveTo(startPosX, height * 0.1);
-      ctx.lineTo(startPosX, height * 0.8);
-      ctx.stroke();
-      ctx.closePath();
 
-      ctx.restore();
-      let arr = [
-        { x: startPosX, y: height * 0.1 },
-        { x: startPosX, y: height * 0.8 },
-      ];
-      data.push(arr);
-    }
-
-    // sort();
+  const updateLine = (total: number) => {
+    step.updateTotal(total);
+    data.forEach((ghostleg: GhostLeg, idx: number) => {
+      let posX = 0;
+      if (cnt >= total) posX = (width - total * areaWidth) / 2 + idx * areaWidth;
+      else {
+        if (idx < cnt) posX = (width - cnt * areaWidth) / 2 + idx * areaWidth;
+        else posX = (width - cnt * areaWidth) / 2 + cnt * areaWidth + (idx - cnt) * areaWidth;
+      }
+      ghostleg.updatePos(posX - step.startIdx * areaWidth);
+    });
   };
-
-  // const sort = () => {
-  //   data.map(arg => {
-  //     return arg.sort((a, b) => a.y - b.y);
-  //   });
-  // };
 
   const setLine = (num: number) => {
     if (num > 0) setOption({ ...option, line: num });

@@ -1,4 +1,5 @@
 export class GhostLeg {
+  id: string;
   x: number;
   width: number;
   height: number;
@@ -37,7 +38,31 @@ export class GhostLeg {
       text: '',
     };
     this.targetPosX = x;
+    this.close = {
+      x: x + 200 - 40,
+      y: height * 0.03,
+    };
+    this.id = this.getRandomId();
   }
+
+  getRandomId = () => {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < 10; i++) {
+      result += characters.charAt(~~(Math.random() * charactersLength));
+    }
+    return result;
+  };
+
+  updatePos = (x: number) => {
+    this.x = x;
+    const idx_x = x + this.areaWidth / 2;
+    this.startInput.x = idx_x - 50;
+    this.endInput.x = idx_x - 50;
+    this.targetPosX = x;
+    this.close.x = x + 200 - 40;
+  };
 
   draw = (ctx: CanvasRenderingContext2D) => {
     const idx_x = this.x + 200 / 2;
@@ -79,10 +104,10 @@ export class GhostLeg {
     ctx.beginPath();
     ctx.strokeStyle = '#222';
     ctx.lineWidth = 1;
-    ctx.moveTo(100, 100);
-    ctx.lineTo(120, 120);
-    ctx.moveTo(100, 120);
-    ctx.lineTo(120, 100);
+    ctx.moveTo(this.close.x, this.close.y);
+    ctx.lineTo(this.close.x + 10, this.close.y + 10);
+    ctx.moveTo(this.close.x, this.close.y + 10);
+    ctx.lineTo(this.close.x + 10, this.close.y);
     ctx.stroke();
     ctx.closePath();
     if (Math.abs(this.targetPosX - this.x) >= 1 + this.defaultSpeed) {
@@ -91,6 +116,7 @@ export class GhostLeg {
       this.x += vel;
       this.startInput.x += vel;
       this.endInput.x += vel;
+      this.close.x += vel;
     }
   };
 
@@ -103,6 +129,12 @@ export class GhostLeg {
   isEndInputPos = (offsetX: number, offsetY: number) => {
     const isX = this.endInput.x <= offsetX && offsetX <= this.endInput.x + 100;
     const isY = this.endInput.y <= offsetY && offsetY <= this.endInput.y + this.height * 0.05;
+    if (isX && isY) return true;
+    return false;
+  };
+  isClose = (offsetX: number, offsetY: number) => {
+    const isX = this.close.x <= offsetX && offsetX <= this.close.x + 10;
+    const isY = this.close.y <= offsetY && offsetY <= this.close.y + 10;
     if (isX && isY) return true;
     return false;
   };
@@ -125,6 +157,14 @@ export class Step {
     this.total = total;
     this.cnt = cnt;
   }
+
+  updateTotal = (total: number) => {
+    if (total <= this.startIdx + this.cnt) {
+      this.startIdx -= 1;
+      this.total = total;
+    }
+  };
+
   isNext = () => {
     return this.startIdx + this.cnt === this.total || this.total <= this.cnt ? false : true;
   };
