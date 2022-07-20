@@ -159,10 +159,8 @@ export class Step {
   }
 
   updateTotal = (total: number) => {
-    if (total <= this.startIdx + this.cnt) {
-      this.startIdx -= 1;
-      this.total = total;
-    }
+    if (this.startIdx > 0 && total <= this.startIdx + this.cnt) this.startIdx -= 1;
+    this.total = total;
   };
 
   isNext = () => {
@@ -176,12 +174,14 @@ export class Step {
     if (this.startIdx + 2 * this.cnt <= this.total) nextIdx = this.startIdx + this.cnt;
     else nextIdx = this.total - this.cnt;
     this.startIdx = nextIdx;
+    console.log(nextIdx);
     return nextIdx;
   };
   prevPos = () => {
     let prevIdx = 0;
     if (this.startIdx - this.cnt > 0) prevIdx = this.startIdx - this.cnt;
     this.startIdx = prevIdx;
+    console.log(prevIdx);
     return prevIdx;
   };
 }
