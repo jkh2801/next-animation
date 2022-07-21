@@ -1,4 +1,5 @@
 export type LinkedData = {
+  link: boolean;
   idx: number;
   y: number;
   linkedData: {
@@ -33,6 +34,7 @@ export class GhostLeg {
   defaultLineColor = '#A6ABCA';
   defaultSpeed = 5;
   linkedData: LinkedData[] = [];
+  active = false;
   constructor(x = 0, width: number, height: number) {
     this.x = x;
     this.width = width;
@@ -55,6 +57,10 @@ export class GhostLeg {
     };
     this.id = this.getRandomId();
   }
+
+  setActive = (active: boolean) => {
+    this.active = active;
+  };
 
   setSetting = (setting: string) => {
     this.setting = setting;

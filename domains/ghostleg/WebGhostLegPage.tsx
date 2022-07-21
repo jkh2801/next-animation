@@ -52,6 +52,7 @@ const WebGhostLegPage = () => {
     line: 3,
   });
   const [status, setStatus] = useState('settingNum');
+  const [result, setResult] = useState([]);
 
   useEffect(() => {
     switch (status) {
@@ -147,18 +148,20 @@ const WebGhostLegPage = () => {
     }
 
     data.forEach((ghostleg: GhostLeg, idx: number) => {
-      if (ghostleg.isStartInputPos(offsetX, offsetY) && ghostleg.setting === 'settingInput') {
-        inputState = true;
-        const { startInput } = ghostleg;
-        inputEle.style.display = 'block';
-        inputEle.style.left = startInput.x + 'px';
-        inputEle.style.top = startInput.y + 'px';
-        ref.current.inputType = {
-          idx: idx,
-          type: 'start',
-        };
-        setInfo({ ...info, text: ghostleg.startInput.text });
-        return;
+      if (ghostleg.isStartInputPos(offsetX, offsetY)) {
+        if (ghostleg.setting === 'settingInput') {
+          inputState = true;
+          const { startInput } = ghostleg;
+          inputEle.style.display = 'block';
+          inputEle.style.left = startInput.x + 'px';
+          inputEle.style.top = startInput.y + 'px';
+          ref.current.inputType = {
+            idx: idx,
+            type: 'start',
+          };
+          setInfo({ ...info, text: ghostleg.startInput.text });
+          return;
+        }
       }
       if (ghostleg.isEndInputPos(offsetX, offsetY) && ghostleg.setting === 'settingInput') {
         inputState = true;
@@ -296,9 +299,12 @@ const WebGhostLegPage = () => {
     Array(data.length - 1)
       .fill(1)
       .forEach((_, prevIdx) => {
-        setLinkedDdata(prevIdx, 0.15, 0.3);
-        setLinkedDdata(prevIdx, 0.35, 0.5);
-        setLinkedDdata(prevIdx, 0.55, 0.75);
+        if (prevIdx % 2 === 0 && Math.random() > 0.1) setLinkedDdata(prevIdx, 0.15, 0.2);
+        if (prevIdx % 2 === 1 && Math.random() > 0.2) setLinkedDdata(prevIdx, 0.25, 0.3);
+        if (prevIdx % 2 === 0 && Math.random() > 0.3) setLinkedDdata(prevIdx, 0.35, 0.4);
+        if (prevIdx % 2 === 1 && Math.random() > 0.3) setLinkedDdata(prevIdx, 0.45, 0.5);
+        if (prevIdx % 2 === 0 && Math.random() > 0.2) setLinkedDdata(prevIdx, 0.55, 0.6);
+        if (prevIdx % 2 === 1 && Math.random() > 0.1) setLinkedDdata(prevIdx, 0.65, 0.7);
       });
   };
 
@@ -310,6 +316,7 @@ const WebGhostLegPage = () => {
     const next = data[nextIdx];
     const nextRandom = getRandomPos(height * min, height * max);
     prev.addLinkedData({
+      link: true,
       idx: prevIdx,
       y: prevRandom,
       linkedData: {
@@ -318,6 +325,7 @@ const WebGhostLegPage = () => {
       },
     });
     next.addLinkedData({
+      link: true,
       idx: nextIdx,
       y: nextRandom,
       linkedData: {
@@ -331,6 +339,60 @@ const WebGhostLegPage = () => {
     return ~~(Math.random() * (next - prev)) + ~~prev;
   };
 
+  const handleResultEvent = () => {
+    const result: { start: string; end: string }[] = [];
+    const arr: any = [];
+    const { data } = ref.current;
+    data.forEach((ghostleg: GhostLeg, idx: number) => {
+      result.push({
+        start: ghostleg.startInput.text,
+        end: '',
+      });
+      arr.push([
+        {
+          link: false,
+          idx: idx,
+          x: ghostleg.x,
+          y: ghostleg.height * 0.1,
+        },
+        ...ghostleg.linkedData,
+        {
+          link: false,
+          idx: idx,
+          x: ghostleg.x,
+          y: ghostleg.height * 0.8,
+        },
+      ]);
+    });
+    arr.forEach((a: any) => a.sort((a: any, b: any) => a.y - b.y));
+    console.log(arr);
+    console.log(result);
+    result.forEach((info, idx) => {
+      let posX = idx;
+      let posY = 0;
+      let state = true;
+      console.log('----------');
+      console.log(posX, posY);
+      while (state) {
+        const next = arr[posX][++posY];
+        if (!next.link) {
+          state = false;
+          console.log(next.idx);
+          info.end = data[next.idx].endInput.text;
+        } else {
+          const nextIdx = next.linkedData.idx;
+          posX = nextIdx;
+          posY = arr[nextIdx].findIndex((e: any) => e.y === next.linkedData.y);
+          console.log(
+            nextIdx,
+            arr[nextIdx].findIndex((e: any) => e.y === next.linkedData.y),
+          );
+        }
+      }
+    });
+    console.log(result);
+  };
+
   return (
     <div className="body flexCenter hidden">
       <div className={styles.container}>
@@ -341,6 +403,11 @@ const WebGhostLegPage = () => {
           <div className={cn('flexCenter gap-20', styles.btnBox)}>
             <RoundButton text="+ 사다리 추가" clickEvent={handleAddGhostLeg} color="grey" styleType="typeA" width={200} height={40} />
             <RoundButton text="START" clickEvent={handleStartEvent} styleType="typeA" width={150} height={40} />
+          </div>
+        )}
+        {status === 'start' && (
+          <div className={cn('flexCenter gap-20', styles.btnBox)}>
+            <RoundButton text="결과 보기" clickEvent={handleResultEvent} styleType="typeA" width={150} height={40} />
           </div>
         )}
         {alert.status && <div className={cn('flexCenter fs-20 fw-500', styles.alertBox)}>{alert.text}</div>}
