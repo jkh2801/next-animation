@@ -2,8 +2,8 @@ import { RoundButton } from '@components/button';
 import cn from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import styles from './GhostLeg.module.scss';
-import { SettingNum } from './web';
-import { GhostLeg, LinkedData, Step } from './web/class';
+import { Result, SettingNum } from './web';
+import { GhostLeg, Step } from './web/class';
 
 type RefType = {
   ctx: any;
@@ -52,7 +52,7 @@ const WebGhostLegPage = () => {
     line: 3,
   });
   const [status, setStatus] = useState('settingNum');
-  const [result, setResult] = useState([]);
+  const [result, setResult] = useState<{ start: string; end: string }[]>([]);
 
   useEffect(() => {
     switch (status) {
@@ -67,13 +67,12 @@ const WebGhostLegPage = () => {
 
   const init = () => {
     const canvasEle: any = canvas.current;
-
     ref.current.ctx = canvasEle.getContext('2d');
     ref.current.width = canvasEle.width = canvasEle.clientWidth;
     ref.current.height = canvasEle.height = canvasEle.clientHeight;
     ref.current.cnt = ~~(ref.current.width / areaWidth);
     ref.current.step = new Step(option.line, ref.current.cnt);
-
+    ref.current.data = [];
     const { width, height, cnt, data } = ref.current;
 
     Array(option.line)
@@ -365,32 +364,24 @@ const WebGhostLegPage = () => {
       ]);
     });
     arr.forEach((a: any) => a.sort((a: any, b: any) => a.y - b.y));
-    console.log(arr);
-    console.log(result);
     result.forEach((info, idx) => {
       let posX = idx;
       let posY = 0;
       let state = true;
-      console.log('----------');
-      console.log(posX, posY);
       while (state) {
         const next = arr[posX][++posY];
         if (!next.link) {
           state = false;
-          console.log(next.idx);
           info.end = data[next.idx].endInput.text;
         } else {
           const nextIdx = next.linkedData.idx;
           posX = nextIdx;
           posY = arr[nextIdx].findIndex((e: any) => e.y === next.linkedData.y);
-          console.log(
-            nextIdx,
-            arr[nextIdx].findIndex((e: any) => e.y === next.linkedData.y),
-          );
         }
       }
     });
-    console.log(result);
+    setResult(result);
+    setStatus('result');
   };
 
   return (
@@ -410,6 +401,7 @@ const WebGhostLegPage = () => {
             <RoundButton text="결과 보기" clickEvent={handleResultEvent} styleType="typeA" width={150} height={40} />
           </div>
         )}
+        {status === 'result' && <Result setStatus={setStatus} result={result} />}
         {alert.status && <div className={cn('flexCenter fs-20 fw-500', styles.alertBox)}>{alert.text}</div>}
       </div>
     </div>
