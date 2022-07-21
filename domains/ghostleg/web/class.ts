@@ -1,3 +1,12 @@
+export type LinkedData = {
+  idx: number;
+  y: number;
+  linkedData: {
+    idx: number;
+    y: number;
+  };
+};
+
 export class GhostLeg {
   id: string;
   x: number;
@@ -18,10 +27,12 @@ export class GhostLeg {
     x: 0,
     y: 0,
   };
+  setting = 'settingInput';
   targetPosX: number;
   defaultLineWidth = 3;
   defaultLineColor = '#A6ABCA';
   defaultSpeed = 5;
+  linkedData: LinkedData[] = [];
   constructor(x = 0, width: number, height: number) {
     this.x = x;
     this.width = width;
@@ -39,11 +50,15 @@ export class GhostLeg {
     };
     this.targetPosX = x;
     this.close = {
-      x: x + 200 - 40,
+      x: x + this.areaWidth - 40,
       y: height * 0.03,
     };
     this.id = this.getRandomId();
   }
+
+  setSetting = (setting: string) => {
+    this.setting = setting;
+  };
 
   getRandomId = () => {
     let result = '';
@@ -61,11 +76,15 @@ export class GhostLeg {
     this.startInput.x = idx_x - 50;
     this.endInput.x = idx_x - 50;
     this.targetPosX = x;
-    this.close.x = x + 200 - 40;
+    this.close.x = x + this.areaWidth - 40;
+  };
+
+  addLinkedData = (data: LinkedData) => {
+    this.linkedData.push(data);
   };
 
   draw = (ctx: CanvasRenderingContext2D) => {
-    const idx_x = this.x + 200 / 2;
+    const idx_x = this.x + this.areaWidth / 2;
     // startInput
     ctx.beginPath();
     ctx.strokeStyle = '#222';
@@ -100,16 +119,31 @@ export class GhostLeg {
     ctx.fillStyle = '#000';
     ctx.font = '14px sans-serif';
     ctx.fillText(this.endInput.text, this.endInput.x + 50, this.height * 0.825);
-    // close
-    ctx.beginPath();
-    ctx.strokeStyle = '#222';
-    ctx.lineWidth = 1;
-    ctx.moveTo(this.close.x, this.close.y);
-    ctx.lineTo(this.close.x + 10, this.close.y + 10);
-    ctx.moveTo(this.close.x, this.close.y + 10);
-    ctx.lineTo(this.close.x + 10, this.close.y);
-    ctx.stroke();
-    ctx.closePath();
+    if (this.setting === 'settingInput') {
+      // close
+      ctx.beginPath();
+      ctx.strokeStyle = '#222';
+      ctx.lineWidth = 1;
+      ctx.moveTo(this.close.x, this.close.y);
+      ctx.lineTo(this.close.x + 10, this.close.y + 10);
+      ctx.moveTo(this.close.x, this.close.y + 10);
+      ctx.lineTo(this.close.x + 10, this.close.y);
+      ctx.stroke();
+      ctx.closePath();
+    }
+
+    if (this.linkedData.length > 0) {
+      this.linkedData.forEach(info => {
+        ctx.beginPath();
+        ctx.lineWidth = this.defaultLineWidth;
+        ctx.strokeStyle = this.defaultLineColor;
+        ctx.moveTo(idx_x, info.y);
+        ctx.lineTo(idx_x + (info.linkedData.idx - info.idx) * this.areaWidth, info.linkedData.y);
+        ctx.stroke();
+        ctx.closePath();
+      });
+    }
+
     if (Math.abs(this.targetPosX - this.x) >= 1 + this.defaultSpeed) {
       const dir = Math.sign(this.targetPosX - this.x);
       const vel = dir * this.defaultSpeed;

@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import styles from './GhostLeg.module.scss';
 import { SettingNum } from './web';
-import { GhostLeg, Step } from './web/class';
+import { GhostLeg, LinkedData, Step } from './web/class';
 
 type RefType = {
   ctx: any;
@@ -44,7 +44,6 @@ const WebGhostLegPage = () => {
     },
   });
 
-  let lineData = [];
   const defaultLineWidth = 3;
   const defaultLineColor = '#A6ABCA';
   const areaWidth = 200;
@@ -103,7 +102,6 @@ const WebGhostLegPage = () => {
   };
 
   const handleAddEvent = () => {
-    console.log('handleAddEvent');
     const canvasEle: any = canvas.current;
     canvasEle.addEventListener('mousemove', handleMouseMoveEvent);
     canvasEle.addEventListener('mousedown', handleMouseDownEvent);
@@ -116,14 +114,17 @@ const WebGhostLegPage = () => {
   };
 
   const handleMouseMoveEvent = (e: MouseEvent) => {
-    console.log('handleMouseMoveEvent');
     const canvasEle: any = canvas.current;
     const { width, height, data, step } = ref.current;
     let cursor = 'default';
     const { offsetX, offsetY } = e;
     data.forEach((ghostleg: GhostLeg) => {
-      if (ghostleg.isStartInputPos(offsetX, offsetY) || ghostleg.isEndInputPos(offsetX, offsetY)) cursor = 'text';
-      if (ghostleg.isClose(offsetX, offsetY)) cursor = 'pointer';
+      if (ghostleg.isStartInputPos(offsetX, offsetY)) {
+        if (ghostleg.setting === 'settingInput') cursor = 'text';
+        else cursor = 'pointer';
+      }
+      if (ghostleg.isEndInputPos(offsetX, offsetY) && ghostleg.setting === 'settingInput') cursor = 'text';
+      if (ghostleg.isClose(offsetX, offsetY) && ghostleg.setting === 'settingInput') cursor = 'pointer';
     });
     if (isCursor(width - 44, height * 0.45 - 9, width - 16, height * 0.45 + 9, offsetX, offsetY) && step.isNext()) cursor = 'pointer';
     if (isCursor(16, height * 0.45 - 9, 44, height * 0.45 + 9, offsetX, offsetY) && step.isPrev()) cursor = 'pointer';
@@ -131,11 +132,10 @@ const WebGhostLegPage = () => {
   };
 
   const handleMouseDownEvent = (e: MouseEvent) => {
-    console.log('handleMouseDownEvent');
     const { width, height, data, step, inputType } = ref.current;
     const { offsetX, offsetY } = e;
     const inputEle: any = input.current;
-    let status = false;
+    let inputState = false;
     let close = {
       status: false,
       id: '',
@@ -147,8 +147,8 @@ const WebGhostLegPage = () => {
     }
 
     data.forEach((ghostleg: GhostLeg, idx: number) => {
-      if (ghostleg.isStartInputPos(offsetX, offsetY)) {
-        status = true;
+      if (ghostleg.isStartInputPos(offsetX, offsetY) && ghostleg.setting === 'settingInput') {
+        inputState = true;
         const { startInput } = ghostleg;
         inputEle.style.display = 'block';
         inputEle.style.left = startInput.x + 'px';
@@ -160,8 +160,8 @@ const WebGhostLegPage = () => {
         setInfo({ ...info, text: ghostleg.startInput.text });
         return;
       }
-      if (ghostleg.isEndInputPos(offsetX, offsetY)) {
-        status = true;
+      if (ghostleg.isEndInputPos(offsetX, offsetY) && ghostleg.setting === 'settingInput') {
+        inputState = true;
         const { endInput } = ghostleg;
         inputEle.style.display = 'block';
         inputEle.style.left = endInput.x + 'px';
@@ -173,7 +173,7 @@ const WebGhostLegPage = () => {
         setInfo({ ...info, text: ghostleg.endInput.text });
         return;
       }
-      if (ghostleg.isClose(offsetX, offsetY)) {
+      if (ghostleg.isClose(offsetX, offsetY) && ghostleg.setting === 'settingInput') {
         close = {
           status: true,
           id: ghostleg.id,
@@ -181,7 +181,9 @@ const WebGhostLegPage = () => {
         return;
       }
     });
-
+    if (!inputState) {
+      inputEle.style.display = 'none';
+    }
     if (close.status) {
       ref.current.inputType = {
         idx: 0,
@@ -243,7 +245,7 @@ const WebGhostLegPage = () => {
     const { width, height, data } = ref.current;
     data.push(new GhostLeg(0, width, height));
     updateLine(data.length);
-    // handleAddEvent();
+    handleAddEvent();
     setAlert({
       status: true,
       text: '추가 완료!',
@@ -281,6 +283,54 @@ const WebGhostLegPage = () => {
     return false;
   };
 
+  const handleStartEvent = () => {
+    handleRemoveEvent();
+    setStatus('start');
+    setRandomLine();
+    handleAddEvent();
+  };
+
+  const setRandomLine = () => {
+    const { data } = ref.current;
+    data.forEach((ghostLeg: GhostLeg) => ghostLeg.setSetting('start'));
+    Array(data.length - 1)
+      .fill(1)
+      .forEach((_, prevIdx) => {
+        setLinkedDdata(prevIdx, 0.15, 0.3);
+        setLinkedDdata(prevIdx, 0.35, 0.5);
+        setLinkedDdata(prevIdx, 0.55, 0.75);
+      });
+  };
+
+  const setLinkedDdata = (prevIdx: number, min: number, max: number) => {
+    const { data, height } = ref.current;
+    const prev = data[prevIdx];
+    const prevRandom = getRandomPos(height * min, height * max);
+    const nextIdx = prevIdx + 1;
+    const next = data[nextIdx];
+    const nextRandom = getRandomPos(height * min, height * max);
+    prev.addLinkedData({
+      idx: prevIdx,
+      y: prevRandom,
+      linkedData: {
+        idx: nextIdx,
+        y: nextRandom,
+      },
+    });
+    next.addLinkedData({
+      idx: nextIdx,
+      y: nextRandom,
+      linkedData: {
+        idx: prevIdx,
+        y: prevRandom,
+      },
+    });
+  };
+
+  const getRandomPos = (prev: number, next: number) => {
+    return ~~(Math.random() * (next - prev)) + ~~prev;
+  };
+
   return (
     <div className="body flexCenter hidden">
       <div className={styles.container}>
@@ -290,7 +340,7 @@ const WebGhostLegPage = () => {
         {status === 'settingInput' && (
           <div className={cn('flexCenter gap-20', styles.btnBox)}>
             <RoundButton text="+ 사다리 추가" clickEvent={handleAddGhostLeg} color="grey" styleType="typeA" width={200} height={40} />
-            <RoundButton text="START" clickEvent={() => {}} styleType="typeA" width={150} height={40} />
+            <RoundButton text="START" clickEvent={handleStartEvent} styleType="typeA" width={150} height={40} />
           </div>
         )}
         {alert.status && <div className={cn('flexCenter fs-20 fw-500', styles.alertBox)}>{alert.text}</div>}
