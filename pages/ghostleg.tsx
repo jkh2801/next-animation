@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import WebGhostLegPage from '@domains/ghostleg/WebGhostLegPage';
 
 export default function GhostLegPage() {
-  console.log('GhostLegPage');
   const [browser, setBrowser] = useState(false);
   useEffect(() => {
     setBrowser(isBrowser);

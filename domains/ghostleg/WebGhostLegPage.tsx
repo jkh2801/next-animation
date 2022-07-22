@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './GhostLeg.module.scss';
 import { Result, SettingNum } from './web';
 import { GhostLeg, Step } from './web/class';
+import { useRouter } from 'next/router';
+import { INFO } from './web/iocrops';
 
 type RefType = {
   ctx: any;
@@ -44,8 +46,6 @@ const WebGhostLegPage = () => {
     },
   });
 
-  const defaultLineWidth = 3;
-  const defaultLineColor = '#A6ABCA';
   const areaWidth = 200;
 
   const [option, setOption] = useState({
@@ -53,17 +53,33 @@ const WebGhostLegPage = () => {
   });
   const [status, setStatus] = useState('settingNum');
   const [result, setResult] = useState<{ start: string; end: string }[]>([]);
-
+  const router = useRouter();
+  console.log(router);
   useEffect(() => {
     switch (status) {
       case 'settingInput':
         init();
+        if (router.query.id === 'iocrops') settingIocrops();
         animate();
         break;
       default:
         break;
     }
   }, [status, option.line]);
+
+  useEffect(() => {
+    const { id } = router.query;
+    console.log(id);
+    if (id === 'iocrops') {
+      setOption({ ...option, line: INFO.length });
+      setStatus('settingInput');
+    }
+  }, [router]);
+
+  const settingIocrops = () => {
+    const { data } = ref.current;
+    data.forEach((ghostleg: GhostLeg, idx: number) => ghostleg.setText('start', INFO[idx]));
+  };
 
   const init = () => {
     const canvasEle: any = canvas.current;
@@ -98,7 +114,6 @@ const WebGhostLegPage = () => {
     });
     if (step.isPrev()) drawPrev();
     if (step.isNext()) drawNext();
-    // drawLine();
   };
 
   const handleAddEvent = () => {
