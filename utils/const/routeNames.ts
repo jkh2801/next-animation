@@ -2,9 +2,9 @@ export const routeNames = [
   {
     type: 'ALL',
     name: 'Animation',
-    data: ['Balancing', 'Digital', 'Ghost Leg', 'Loading Ex1', 'Moving Star', 'Particle', 'Receipt'],
-    url: ['balancing', 'digital', 'ghostleg', 'loadingex1', 'movingstar', 'particle', 'receipt'],
-    pagetype: ['WEB', 'ALL', 'ALL', 'ALL', 'ALL', 'ALL', 'WEB'],
+    data: ['Balancing', 'Digital', 'Loading Ex1', 'Moving Star', 'Particle', 'Receipt'],
+    url: ['balancing', 'digital', 'loadingex1', 'movingstar', 'particle', 'receipt'],
+    pagetype: ['WEB', 'ALL', 'ALL', 'ALL', 'ALL', 'WEB'],
   },
   {
     type: 'WEB',
@@ -16,9 +16,9 @@ export const routeNames = [
   {
     type: 'WEB',
     name: 'Game',
-    data: ['Tetris'],
-    url: ['tetris'],
-    pagetype: ['WEB'],
+    data: ['Ghost Leg', 'Tetris'],
+    url: ['ghostleg', 'tetris'],
+    pagetype: ['WEB', 'WEB'],
   },
   {
     type: 'WEB',

@@ -1,4 +1,4 @@
-import { RoundButton } from '@components/button';
+import { HomeButton, RoundButton } from '@components/button';
 import cn from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import styles from './GhostLeg.module.scss';
@@ -401,6 +401,7 @@ const WebGhostLegPage = () => {
 
   return (
     <div className="body flexCenter hidden">
+      <HomeButton />
       <div className={styles.container}>
         {status === 'settingNum' && <SettingNum option={option} setLine={setLine} setStatus={setStatus} />}
         <canvas ref={canvas} />
