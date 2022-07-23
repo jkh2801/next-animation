@@ -54,7 +54,6 @@ const WebGhostLegPage = () => {
   const [status, setStatus] = useState('settingNum');
   const [result, setResult] = useState<{ start: string; end: string }[]>([]);
   const router = useRouter();
-  console.log(router);
   useEffect(() => {
     switch (status) {
       case 'settingInput':
@@ -69,7 +68,6 @@ const WebGhostLegPage = () => {
 
   useEffect(() => {
     const { id } = router.query;
-    console.log(id);
     if (id === 'iocrops') {
       setOption({ ...option, line: INFO.length });
       setStatus('settingInput');

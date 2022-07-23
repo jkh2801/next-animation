@@ -16,9 +16,9 @@ export const routeNames = [
   {
     type: 'WEB',
     name: 'Game',
-    data: ['Ghost Leg', 'Tetris'],
-    url: ['ghostleg', 'tetris'],
-    pagetype: ['WEB', 'WEB'],
+    data: ['Brick Breaker', 'Ghost Leg', 'Tetris'],
+    url: ['brick', 'ghostleg', 'tetris'],
+    pagetype: ['WEB', 'WEB', 'WEB'],
   },
   {
     type: 'WEB',
