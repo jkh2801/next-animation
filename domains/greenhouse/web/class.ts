@@ -3,7 +3,6 @@ export class Cell {
   y = 0;
   type = 'none';
   text = '';
-  unitLength = 30;
 
   constructor(x: number, y: number, type = 'none', text = '') {
     this.x = x;
@@ -12,31 +11,40 @@ export class Cell {
     this.text = text;
   }
 
-  draw = (ctx: CanvasRenderingContext2D) => {
+  draw = (ctx: CanvasRenderingContext2D, unitLength: number, type = '') => {
     ctx.beginPath();
+    const x = this.x * unitLength;
+    const y = this.y * unitLength;
     switch (this.type) {
       case 'none':
         ctx.fillStyle = '#ffc08a';
-        ctx.fillRect(this.x, this.y, this.unitLength, this.unitLength);
+        ctx.fillRect(x, y, unitLength, unitLength);
         ctx.strokeStyle = '#ff7600';
-        ctx.strokeRect(this.x, this.y, this.unitLength, this.unitLength);
+        ctx.strokeRect(x, y, unitLength, unitLength);
         break;
       case 'header':
         ctx.fillStyle = '#fff';
-        ctx.fillRect(this.x, this.y, this.unitLength, this.unitLength);
+        ctx.fillRect(x, y, unitLength, unitLength);
         ctx.strokeStyle = '#eee';
-        ctx.strokeRect(this.x, this.y, this.unitLength, this.unitLength);
+        ctx.strokeRect(x, y, unitLength, unitLength);
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         ctx.fillStyle = '#000';
         ctx.font = '700 11px sans-serif';
-        ctx.fillText(this.text, this.x + this.unitLength / 2, this.y + this.unitLength / 2);
+        ctx.fillText(this.text, x + unitLength / 2, y + unitLength / 2);
         break;
       case 'cell':
-        ctx.fillStyle = '#e9fdfc';
-        ctx.fillRect(this.x, this.y, this.unitLength, this.unitLength);
-        ctx.strokeStyle = '#08c7bd';
-        ctx.strokeRect(this.x, this.y, this.unitLength, this.unitLength);
+        if (type === 'mouseover') {
+          ctx.fillStyle = '#a8cbff';
+          ctx.strokeStyle = '#0066ff';
+        } else if (type === 'selected') {
+          ctx.fillStyle = '#00ffbf';
+        } else {
+          ctx.fillStyle = '#e9fdfc';
+          ctx.strokeStyle = '#08c7bd';
+        }
+        ctx.fillRect(x, y, unitLength, unitLength);
+        ctx.strokeRect(x, y, unitLength, unitLength);
         break;
     }
   };
