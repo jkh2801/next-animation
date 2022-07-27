@@ -35,10 +35,10 @@ export class Cell {
         break;
       case 'cell':
         if (type === 'mouseover') {
+          ctx.fillStyle = '#00ffbf';
+        } else if (type === 'selected') {
           ctx.fillStyle = '#a8cbff';
           ctx.strokeStyle = '#0066ff';
-        } else if (type === 'selected') {
-          ctx.fillStyle = '#00ffbf';
         } else {
           ctx.fillStyle = '#e9fdfc';
           ctx.strokeStyle = '#08c7bd';

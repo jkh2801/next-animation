@@ -29,7 +29,8 @@ type RefType = {
     width: number;
     height: number;
   };
-  dragState: boolean;
+  mouseState: string;
+  selectDatas: string[];
 };
 
 const WebGreenHousePage = () => {
@@ -58,7 +59,8 @@ const WebGreenHousePage = () => {
       width: 0,
       height: 0,
     },
-    dragState: false,
+    mouseState: '',
+    selectDatas: [],
   });
   console.log(farm);
   console.log(map);
@@ -68,26 +70,81 @@ const WebGreenHousePage = () => {
     ref.current.ctx = canvasEle.getContext('2d');
     ref.current.viewport.width = canvasEle.width = canvasEle.clientWidth;
     ref.current.viewport.height = canvasEle.height = canvasEle.clientHeight;
-    canvasEle.addEventListener('wheel', handleWheelEvent, { passion: false });
+
     init();
   }, []);
 
   useEffect(() => {
     const canvasEle: any = canvas.current;
     if (!canvasEle) return;
-    const mouseMove = (e: MouseEvent) => {
-      const { dragState, camera } = ref.current;
-
-      ref.current.mouseMove = {
-        x: dragState ? -1 : e.pageX + camera.x,
-        y: dragState ? -1 : e.pageY + camera.y,
-      };
-    };
-    canvasEle.addEventListener('mousemove', mouseMove);
+    canvasEle.addEventListener('mousedown', handleMouseDownEvent);
+    canvasEle.addEventListener('mousemove', handleMouseMoveEvent);
+    canvasEle.addEventListener('mouseup', handleMouseUpEvent);
+    canvasEle.addEventListener('wheel', handleWheelEvent, { passion: false });
     return () => {
-      canvasEle.removeEventListener('mousemove', mouseMove);
+      canvasEle.removeEventListener('mousedown', handleMouseDownEvent);
+      canvasEle.removeEventListener('mousemove', handleMouseMoveEvent);
+      canvasEle.removeEventListener('mouseup', handleMouseUpEvent);
+      canvasEle.removeEventListener('wheel', handleWheelEvent);
     };
-  }, [ref.current.dragState]);
+  }, [ref.current.mouseState]);
+
+  const handleMouseUpEvent = () => {
+    ref.current.mouseState = '';
+  };
+
+  const handleMouseDownEvent = (e: MouseEvent) => {
+    const { button } = e;
+    const { camera } = ref.current;
+    if (button === 0) {
+      if (!e.ctrlKey) ref.current.selectDatas = [];
+      ref.current.mouseDown = {
+        x: e.pageX + camera.x,
+        y: e.pageY + camera.y,
+      };
+      ref.current.mouseMove = {
+        x: e.pageX + camera.x,
+        y: e.pageY + camera.y,
+      };
+      ref.current.mouseState = 'drag';
+    } else if (button === 1) {
+      ref.current.mouseDown = {
+        x: e.pageX,
+        y: e.pageY,
+      };
+      ref.current.mouseState = 'translate';
+    } else if (button === 2) {
+    }
+  };
+
+  const handleMouseMoveEvent = (e: MouseEvent) => {
+    const { mouseState, camera, mouseDown, unitLength, selectDatas } = ref.current;
+    if (mouseState === 'translate') {
+      moveCamera(e.pageX - mouseDown.x, e.pageY - mouseDown.y);
+      ref.current.mouseDown = {
+        x: e.pageX,
+        y: e.pageY,
+      };
+    } else if (mouseState === 'drag') {
+      const x1 = ~~(mouseDown.x / unitLength);
+      const x2 = ~~((camera.x + e.pageX) / unitLength);
+      const y1 = ~~(mouseDown.y / unitLength);
+      const y2 = ~~((camera.y + e.pageY) / unitLength);
+      for (let y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) {
+        for (let x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) {
+          if (0 <= x && x < map.width && 0 <= y && y < map.height) {
+            const str = `${x}-${y}`;
+            if (!~selectDatas.indexOf(str)) selectDatas.push(str);
+          }
+        }
+      }
+      console.log(selectDatas);
+    }
+    ref.current.mouseMove = {
+      x: e.pageX + camera.x,
+      y: e.pageY + camera.y,
+    };
+  };
 
   const init = () => {
     const { unitLength, ctx } = ref.current;
@@ -116,7 +173,7 @@ const WebGreenHousePage = () => {
   };
 
   const animate = () => {
-    const { ctx, cells, viewport, camera, unitLength, mouseMove } = ref.current;
+    const { ctx, cells, viewport, camera, unitLength, mouseMove, mouseState, selectDatas } = ref.current;
     requestAnimationFrame(animate);
     ctx.clearRect(camera.x, camera.y, viewport.width, viewport.height);
     const x1 = ~~(camera.x / unitLength);
@@ -128,41 +185,21 @@ const WebGreenHousePage = () => {
     for (let y = y1; y <= y2; y++) {
       for (let x = x1; x <= x2; x++) {
         if (0 <= x && x < map.width && 0 <= y && y < map.height) {
-          if (mx === x && my === y) cells[y][x].draw(ctx, unitLength, 'mouseover');
+          if (~selectDatas.indexOf(`${x}-${y}`)) cells[y][x].draw(ctx, unitLength, 'selected');
+          else if (mx === x && my === y) cells[y][x].draw(ctx, unitLength, 'mouseover');
           else cells[y][x].draw(ctx, unitLength);
         }
       }
     }
+    if (mouseState === 'drag') setDragArea();
   };
 
-  const handleMouseDownEvent = (e: React.MouseEvent) => {
-    const { button } = e;
-    if (button === 1) {
-      const canvasEle: any = canvas.current;
-      ref.current.mouseDown = {
-        x: e.pageX,
-        y: e.pageY,
-      };
-      ref.current.dragState = true;
-      canvasEle.addEventListener('mousemove', handleMouseMoveEvent);
-      canvasEle.addEventListener('mouseup', handleMouseUpEvent);
-    }
-  };
-
-  const handleMouseUpEvent = () => {
-    const canvasEle: any = canvas.current;
-    ref.current.dragState = false;
-    canvasEle.removeEventListener('mousemove', handleMouseMoveEvent);
-    canvasEle.removeEventListener('mouseup', handleMouseUpEvent);
-  };
-
-  const handleMouseMoveEvent = (e: React.MouseEvent) => {
-    const { x, y } = ref.current.mouseDown;
-    moveCamera(e.pageX - x, e.pageY - y);
-    ref.current.mouseDown = {
-      x: e.pageX,
-      y: e.pageY,
-    };
+  const setDragArea = () => {
+    const { ctx, mouseDown, mouseMove } = ref.current;
+    ctx.beginPath();
+    ctx.strokeStyle = '#9a54f6';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(mouseDown.x, mouseDown.y, mouseMove.x - mouseDown.x, mouseMove.y - mouseDown.y);
   };
 
   const moveCamera = (x: number, y: number) => {
@@ -183,7 +220,7 @@ const WebGreenHousePage = () => {
     <div className="body flexCenter hidden">
       <HomeButton />
       <div className={styles.container}>
-        <canvas ref={canvas} onMouseDown={handleMouseDownEvent} />
+        <canvas ref={canvas} />
       </div>
     </div>
   );
